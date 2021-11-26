@@ -6,12 +6,17 @@ const player = (name,color,value) => {
     };
 
     const increaseScore = function () {
-        score++
+        score++;
     };
+
+    const resetScore = function () {
+        score = 0;
+    }
 
     return {
         getScore,
-        increaseScore
+        increaseScore,
+        resetScore
     };
 };
 
@@ -42,9 +47,18 @@ const gameBoard = (() => {
             tiles[row][column] = value;
         };
 
+        const resetBoard = function () {
+            tiles.forEach(row => {
+                row.forEach(tile => {
+                    tile = "";
+                });
+            });
+        }
+
         return{
             getLines,
-            setTile
+            setTile,
+            resetBoard
         };
 })();
 
