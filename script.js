@@ -1,5 +1,18 @@
-const player = () => {
+const player = (name,color,value) => {
+    let score = 0;
 
+    const getScore = function () {
+        return score;
+    };
+
+    const increaseScore = function () {
+        score++
+    };
+
+    return {
+        getScore,
+        increaseScore
+    };
 };
 
 const gameBoard = (() => {
@@ -32,11 +45,10 @@ const gameBoard = (() => {
         return{
             getLines,
             setTile
-        }
+        };
 })();
 
 const gameLogic = (() => {
-
     //Checks every tile in a given line, returns true if they're all the same value to indicate a match,
     //otherwise returns false.
     const _checkTiles = function (line) {
