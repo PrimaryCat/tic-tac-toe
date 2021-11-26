@@ -41,17 +41,17 @@ const gameLogic = (() => {
     };
 
     const _checkMatch = function (lines) {
-        let gameEnd = false;
+        let matchFound = false;
 
         for(let line of lines){
-            gameEnd = _checkTiles(line);
+            matchFound = _checkTiles(line);
 
-            if(gameEnd === true){
+            if(matchFound === true){
                 break;
             };
         };
         
-        return gameEnd;
+        return matchFound;
     };
 
 })();
