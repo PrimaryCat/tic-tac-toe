@@ -39,12 +39,29 @@ const gameBoard = (() => {
             [tiles[0][2],tiles[1][1],tiles[2][0]],
         ];
 
+        //An array of all the row and column data for each legal 3-tile long lines where a match can occur.
+        //Not the cleanest solution, but works for a small number of lines such as this one.
+        const lineRef = [
+              [[0,0],[0,1],[0,2]],
+              [[1,0],[1,1],[1,2]],
+              [[2,0],[2,1],[2,2]],
+              [[0,0],[1,0],[2,0]],
+              [[0,1],[1,1],[2,1]],
+              [[0,2],[1,2],[2,2]],
+              [[0,0],[1,1],[2,2]],
+              [[0,2],[1,1],[2,0]],
+        ];
+
         const getLines = function () {
             return lines;
         };
 
         const setTile = function (row,column,value) {
             tiles[row][column] = value;
+        };
+
+        const resetLine = function (lineIndex) {
+            
         };
 
         const resetBoard = function () {
@@ -75,16 +92,18 @@ const gameLogic = (() => {
     //otherwise returns false.
     const _checkBoard = function (lines) {
         let matchFound = false;
+        let lineIndex = null;
 
         for(let line of lines){
             matchFound = _checkTiles(line);
 
             if(matchFound === true){
+                lineIndex = lines.indexOf(line);
                 break;
             };
         };
         
-        return matchFound;
+        return {matchFound,lineIndex};
     };
 
 })();
