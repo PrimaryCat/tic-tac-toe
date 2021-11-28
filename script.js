@@ -52,58 +52,92 @@ const gameBoard = (() => {
               [[0,2],[1,1],[2,0]],
         ];
 
-        const getLines = function () {
-            return lines;
+        const _setTile = function (value,tile) {
+            let response = ""
+            if (tiles[tile[0]][tile[1]] === "") {
+                tiles[tile[0]][tile[1]] = value;
+                response = "TILE SET"
+                const checkMessage = _checkBoard();
+            }
+            else {
+                response = "TILE NOT EMPTY"
+            };
+
         };
 
-        const setTile = function (row,column,value) {
-            tiles[row][column] = value;
+        const _resetLine = function (lineIndex) {
+            let matchingLine = lineRef[lineIndex]
+            matchingLine.forEach(tile => {
+                tiles[tile[0]][tile[1]] = "";
+            });
+            return "LINE RESET"
         };
 
-        const resetLine = function (lineIndex) {
-            
-        };
-
-        const resetBoard = function () {
+        const _resetBoard = function () {
             tiles.forEach(row => {
                 row.forEach(tile => {
                     tile = "";
                 });
             });
+            return "BOARD RESET"
         }
 
+        //Checks every tile in a given line, returns true if they're all the same value to indicate a match,
+        //otherwise returns false.
+        const _checkTiles = function (line) {
+            return line.every((tile) => {
+                return tile === line[0];
+            });
+        };
+
+        //Checks the whole board for matches, returns true if a match is present on the board,
+        //otherwise returns false.
+        const _checkBoard = function () {
+            let response = "MATCH NOT FOUND";
+            let matchFound = false;
+            let lineIndex = null;
+
+            for(let line of lines){
+                matchFound = _checkTiles(line);
+
+                if(matchFound === true){
+                    lineIndex = lines.indexOf(line);
+                    response = "MATCH FOUND AT " + lineIndex
+                    let message = _resetLine(lineIndex);
+                    response = response + " " + message;
+                    break;
+                };
+            };
+            
+            return response;
+        };
+
+        //Function to handle requests made to the gameboard and report back. Takes input in the form
+        //of an array structured [commandIndex,command]. Command indexes are 0 for a board reset and 1 for
+        //player input. For player input, the command is an array structured as [playerValue,[row,column]].
+        //returns 
+        const requestHandler = function (request) {
+            let response = ""
+            switch(request[0]){
+                case 0:
+                    response = _resetBoard();
+                    break;
+                case 1:
+                    response = _setTile(request[1])
+                    break;
+                default:
+                    response = "UNKNOWN COMMAND"
+                    break;
+            };
+            return response;
+        };
+
         return{
-            getLines,
-            setTile,
-            resetBoard
+          requestHandler  
         };
 })();
 
 const gameLogic = (() => {
-    //Checks every tile in a given line, returns true if they're all the same value to indicate a match,
-    //otherwise returns false.
-    const _checkTiles = function (line) {
-        return line.every((tile) => {
-            return tile === line[0];
-        });
-    };
 
-    //Checks the whole board for matches, returns true if a match is present on the board,
-    //otherwise returns false.
-    const _checkBoard = function (lines) {
-        let matchFound = false;
-        let lineIndex = null;
-
-        for(let line of lines){
-            matchFound = _checkTiles(line);
-
-            if(matchFound === true){
-                lineIndex = lines.indexOf(line);
-                break;
-            };
-        };
-        
-        return {matchFound,lineIndex};
-    };
 
 })();
