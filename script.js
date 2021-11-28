@@ -1,10 +1,6 @@
 const player = (name,color,value) => {
     let score = 0;
 
-    const _getScore = function () {
-        return score;
-    };
-
     const _increaseScore = function () {
         score++;
     };
