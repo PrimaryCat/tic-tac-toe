@@ -12,7 +12,7 @@ const player = (name,color,value) => {
     //Function to handle requests made to the player and report back. Takes input in the form
     //of an array structured [commandIndex,command]. Command indexes are 0 for a 
     //Returns a response code structured [responseArgs,...].
-    const _requestHandler = function () {
+    const requestHandler = function () {
 
     };
 
@@ -98,9 +98,14 @@ const gameBoard = (() => {
         //Checks every tile in a given line, returns true if they're all the same value to indicate a match,
         //otherwise returns false.
         const _checkTiles = function (line) {
-            return line.every((tile) => {
-                return [tile === line[0],tile];
-            });
+            if(line[0] !== 0){
+                return line.every((tile) => {
+                    return [tile === line[0],tile];
+                });
+            }
+            else {
+                return false;
+            };
         };
 
         //Checks the whole board for matches, returns true if a match is present on the board,
