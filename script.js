@@ -1,22 +1,27 @@
 const player = (name,color,value) => {
     let score = 0;
 
-    const getScore = function () {
+    const _getScore = function () {
         return score;
     };
 
-    const increaseScore = function () {
+    const _increaseScore = function () {
         score++;
     };
 
-    const resetScore = function () {
+    const _resetScore = function () {
         score = 0;
     }
 
+    //Function to handle requests made to the player and report back. Takes input in the form
+    //of an array structured [commandIndex,command]. Command indexes are 0 for a 
+    //Returns a response code structured [responseArgs,...].
+    const _requestHandler = function () {
+
+    };
+
     return {
-        getScore,
-        increaseScore,
-        resetScore
+        requestHandler
     };
 };
 
@@ -65,7 +70,7 @@ const gameBoard = (() => {
 
         const _setTile = function (value,tile) {
             let response = [];
-            if (tiles[tile[0]][tile[1]] === "") {
+            if (tiles[tile[0]][tile[1]] === 0) {
                 tiles[tile[0]][tile[1]] = value;
                 response.push(0);
                 const checkMessage = _checkBoard();
@@ -131,7 +136,7 @@ const gameBoard = (() => {
         //Function to handle requests made to the gameboard and report back. Takes input in the form
         //of an array structured [commandIndex,command]. Command indexes are 0 for a board reset and 1 for
         //player input. For player input, the command is an array structured as [playerValue,[row,column]].
-        //returns a response code structured [responseArgs,...].
+        //Returns a response code structured [responseArgs,...].
         const requestHandler = function (request) {
             let response;
             switch(request[0]){
