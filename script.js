@@ -265,6 +265,8 @@ const gameLogic = (() => {
     };
 
     const startGame = function () {
+        document.getElementById("reset").classList.remove("hidden");
+        document.getElementById("start").classList.add("hidden");
         players = [];
         _createPlayers();
         currentPlayer = 1;
@@ -275,6 +277,8 @@ const gameLogic = (() => {
         document.getElementById("playerTwoName").value = "Player 2";
         document.getElementById("playerOneScore").innerText = "0";
         document.getElementById("playerTwoScore").innerText = "0";
+        document.getElementById("reset").classList.add("hidden");
+        document.getElementById("start").classList.remove("hidden");
         currentPlayer = 0;
         gameBoard.requestHandler([0]);
         players.forEach(player => {
@@ -282,10 +286,30 @@ const gameLogic = (() => {
         });
     };
 
+    const changeMode = function (mode) {
+        switch(mode){
+            case 0:
+                document.getElementById("vsPlayer").classList.add("hidden");
+                document.getElementById("vsAI").classList.remove("hidden");
+                document.getElementById("playerTwoName").value = "Robobot";
+                document.getElementById("playerTwoName").disabled = true;
+                break;
+            case 1:
+                document.getElementById("vsPlayer").classList.remove("hidden");
+                document.getElementById("vsAI").classList.add("hidden");
+                document.getElementById("playerTwoName").value = "Player 2";
+                document.getElementById("playerTwoName").disabled = false;
+                break;
+            default:
+                break;
+        }
+    }
+
     return{
         claimTile,
         startGame,
         resetGame,
+        changeMode
     };
 
 })();
@@ -315,6 +339,8 @@ const initializer = (() => {
         });
         document.getElementById("start").onclick = () => gameLogic.startGame();
         document.getElementById("reset").onclick = () => gameLogic.resetGame();
+        document.getElementById("vsPlayer").onclick = () => gameLogic.changeMode(0);
+        document.getElementById("vsAI").onclick = () => gameLogic.changeMode(1);
     };
 
     const start = function () {

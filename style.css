@@ -36,6 +36,20 @@ body {
 input[type="text"] {
     width: 100%;
     margin-top: 10px;
+    border: none;
+    border-bottom: 3px solid var(--accent-one);
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+}
+
+input[type="text"]:disabled {
+    background-color: white;
+    color: var(--foreground);
 }
 
 /* IDs */
@@ -48,10 +62,20 @@ input[type="text"] {
     grid-template-columns: 20% 50% 20%;
     gap: 5%;
     grid-template-areas: 
-    "reset title start"
+    "reset title ai"
     "playerOne gameBoard playerTwo";
     justify-items: center;
     align-content: center;
+}
+
+#vsAI {
+    grid-area: ai;
+    background-color: var(--accent-two);
+}
+
+#vsPlayer {
+    grid-area: ai;
+    background-color: var(--accent-three);
 }
 
 #reset {
@@ -60,7 +84,7 @@ input[type="text"] {
 }
 
 #start {
-    grid-area: start;
+    grid-area: reset;
     background-color: var(--accent-three);
 }
 
@@ -123,6 +147,8 @@ input[type="text"] {
     border-radius: 20px;
     color: white;
     border: none;
+    font-weight: bolder;
+    font-size: 24px;
 }
 
 .button:hover {
@@ -181,6 +207,10 @@ input[type="text"] {
     width: 100%;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 /* ANIMATION */
