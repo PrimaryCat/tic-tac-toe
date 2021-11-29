@@ -1,0 +1,20 @@
+/* CSS RESET */
+*, *::before, *::after{
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+html, body {
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+input, textarea, select {
+    font: inherit;
+}
+
+ 
