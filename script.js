@@ -9,12 +9,13 @@ const player = function(name) {
         "SCORE GOT",
         "SCORE INCREASED",
         "SCORE RESET",
-        "UNKNOWN COMMAND"
+        "UNKNOWN COMMAND",
+        "NAME GOT"
     ];
 
     //Function to handle requests made to the player and report back. Takes input in the form
-    //of an integer. Command indexes are 0 for to get current score, 1 to increase score by 1 and 2 to reset
-    //score to 0. Returns a response code structured [responseArgs,...].
+    //of an integer. Command indexes are 0 for to get current score, 1 to increase score by 1, 2 to reset
+    //score to 0 and 3 to get player name. Returns a response code structured [responseArgs,...].
     const requestHandler = function (command) {
         let response;
 
@@ -28,6 +29,9 @@ const player = function(name) {
                 break;
             case 2:
                 response = [2];
+                break;
+            case 3:
+                response = [4,name];
                 break;
             default:
                 response = [3];
