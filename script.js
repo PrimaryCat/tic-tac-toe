@@ -1,19 +1,35 @@
-const player = (name,color,value) => {
+const player = (name,color) => {
     let score = 0;
 
-    const _increaseScore = function () {
-        score++;
-    };
-
-    const _resetScore = function () {
-        score = 0;
-    }
+    //An array of all possible 3-tile long lines where a match can occur.
+    const responseMessages = [
+        "SCORE GOT",
+        "SCORE INCREASED",
+        "SCORE RESET",
+        "UNKNOWN COMMAND"
+    ];
 
     //Function to handle requests made to the player and report back. Takes input in the form
-    //of an array structured [commandIndex,command]. Command indexes are 0 for a 
-    //Returns a response code structured [responseArgs,...].
-    const requestHandler = function () {
+    //of an integer. Command indexes are 0 for to get current score, 1 to increase score by 1 and 2 to reset
+    //score to 0. Returns a response code structured [responseArgs,...].
+    const requestHandler = function (command) {
+        let response;
 
+        switch(command){
+            case 0:
+                response = [0,score];
+                break;
+            case 1:
+                response = [1];
+                score++;
+                break;
+            case 2:
+                response = [2];
+                break;
+            default:
+                response = [3];
+                break;
+        };
     };
 
     return {
