@@ -61,7 +61,8 @@ const gameBoard = (() => {
             "BOARD RESET",
             "MATCH NOT FOUND",
             "MATCH FOUND",
-            "UNKNOWN COMMAND"
+            "UNKNOWN COMMAND",
+            "STATUS GOT"
         ];
 
         const _setTile = function (value,tile) {
@@ -147,7 +148,7 @@ const gameBoard = (() => {
                     response = _setTile(request[1][0],request[1][1]);
                     break;
                 case 2:
-                    response = tiles;
+                    response = [8,tiles];
                     break;
                 default:
                     response = [6];
