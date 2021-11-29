@@ -21,14 +21,66 @@ input, textarea, select {
 /* OVERRIDES */
 
 :root {
-    --background: black;
-    --foreground: white;
+    --background: rgb(255, 217, 0);
+    --foreground: black;
+    --shadow: rgba(255, 0, 0, 0.25);
     --accent-one: yellow;
     --accent-two: red;
 }
 
+body {
+    background-color: var(--background);
+}
+
 /* IDs */
 
+#mainContent {
+    width: 80%;
+    height: 80%;
+    display: grid;
+    grid-template-rows: 10% 85%;
+    grid-template-columns: 20% 50% 20%;
+    gap: 5%;
+    grid-template-areas: 
+    "title title title"
+    "playerOne gameBoard playerTwo";
+}
+
+#title {
+    grid-area: title;
+}
+
+#playerOne {
+    grid-area: playerOne;
+}
+
+#centerCard {
+    grid-area: gameBoard;
+}
+
+#playerTwo {
+    grid-area: playerTwo;
+}
+
 /* CLASSES */
+
+.card {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    box-shadow: 5px 5px 3px 3px var(--shadow);
+}
+
+.flexCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fullSize {
+    width: 100%;
+    height: 100%;
+}
 
 /* ANIMATION */
