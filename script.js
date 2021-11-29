@@ -118,22 +118,27 @@ const gameBoard = (() => {
                 };
             }
             else{
-                const tileElem = document.getElementById(`${tile[0]}${tile[1]}`);
-                tileElem.classList = ["tile"];
-                tiles[tile[0]][tile[1]] = value;
-                let className;
-                switch(value){
-                    case 1:
-                        className = "playerOneSelect";
-                        break;
-                    case 2:
-                        className = "playerTwoSelect";
-                        break;
-                };
-                tileElem.classList.add(className);
-                response.push(0);
-                const checkMessage = _checkBoard();
-                response.push(checkMessage);
+                if (tiles[tile[0]][tile[1]] !== value){
+                    const tileElem = document.getElementById(`${tile[0]}${tile[1]}`);
+                    tileElem.classList = ["tile"];
+                    tiles[tile[0]][tile[1]] = value;
+                    let className;
+                    switch(value){
+                        case 1:
+                            className = "playerOneSelect";
+                            break;
+                        case 2:
+                            className = "playerTwoSelect";
+                            break;
+                    };
+                    tileElem.classList.add(className);
+                    response.push(0);
+                    const checkMessage = _checkBoard();
+                    response.push(checkMessage);
+                }
+                else {
+                    response.push(1);
+                }
             };
             return response;
         };
