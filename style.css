@@ -25,7 +25,8 @@ input, textarea, select {
     --foreground: black;
     --shadow: rgba(255, 0, 0, 0.25);
     --accent-one: rgba(255, 217, 0, 0.5);
-    --accent-two: red;
+    --accent-two: rgb(236, 47, 47);
+    --accent-three: rgb(58, 207, 71);
 }
 
 body {
@@ -55,17 +56,18 @@ input[type="text"] {
 
 #reset {
     grid-area: reset;
-    background-color: rgb(236, 47, 47);
+    background-color: var(--accent-two);
 }
 
 #start {
     grid-area: start;
-    background-color: rgb(58, 207, 71);
+    background-color: var(--accent-three);
 }
 
 #playerOne {
     width: 100%;
     grid-area: playerOne;
+    padding-bottom: 20%;
 }
 
 #centerCard {
@@ -96,12 +98,18 @@ input[type="text"] {
 }
 
 #aiToggle {
-    position: absolute;
-    bottom: 20px;
-    width: 80%;
+    height: 10%;
 }
 
 /* CLASSES */
+
+.playerOneSelect {
+    background-color: var(--accent-two);
+}
+
+.playerTwoSelect {
+    background-color: var(--accent-three);
+}
 
 .avatar {
     aspect-ratio: 1/1;
@@ -116,6 +124,10 @@ input[type="text"] {
     border-radius: 20px;
     color: white;
     border: none;
+}
+
+.button:hover {
+    box-shadow: 0px 0px 5px 5px var(--shadow);
 }
 
 .button:active {

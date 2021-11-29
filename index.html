@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <link rel="shortcut icon" href="assets/circle.svg" type="image/x-icon">
-    <title>Tic Tac Toe!</title>
+    <title>Tic Tac Toe+!</title>
 </head>
 <body>
     <div class="fullSize flexCenter">
@@ -18,7 +18,7 @@
             <div id="playerOne" class="card flexVertical">
                 <div class="nameField flexVertical">
                     <h3>NAME</h3>
-                    <input type="text" name="Player One Namefield" id="playerOneName">
+                    <input type="text" name="Player One Namefield" id="playerOneName" placeholder="Player 1">
                 </div>
                 <div class="avatar">
                     <img src="" alt="Player One Avatar" id="playerOneAvatar">
@@ -45,7 +45,7 @@
             <div id="playerTwo" class="card flexVertical">
                 <div class="nameField flexVertical">
                     <h3>NAME</h3>
-                    <input type="text" name="Player Two Namefield" id="playerTwoName">
+                    <input type="text" name="Player Two Namefield" id="playerTwoName" placeholder="Player 2">
                 </div>
                 <div class="avatar">
                     <img src="" alt="Player Two Avatar" id="playerTwoAvatar">
@@ -53,8 +53,9 @@
                 <div class="scoreField">
                     <h1 id="playerTwoScore">0</h1>
                 </div>
-                <div id="aiToggle">
+                <div id="aiToggle" class="flexVertical">
                     <p>AI</p>
+                    <input type="checkbox" name="AI" id="aiSwtich">
                 </div>
             </div>
         </div>
