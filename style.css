@@ -17,4 +17,18 @@ input, textarea, select {
     font: inherit;
 }
 
- 
+/* STYLE START */
+/* OVERRIDES */
+
+:root {
+    --background: black;
+    --foreground: white;
+    --accent-one: yellow;
+    --accent-two: red;
+}
+
+/* IDs */
+
+/* CLASSES */
+
+/* ANIMATION */
