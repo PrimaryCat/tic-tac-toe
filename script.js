@@ -33,7 +33,8 @@ const player = (name,color) => {
     };
 
     return {
-        requestHandler
+        requestHandler,
+        responseMessages
     };
 };
 
