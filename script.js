@@ -238,6 +238,9 @@ const gameBoard = (() => {
 })();
 
 const gameLogic = (() => {
+    //Gamemode for vs player and vs ai. 0 denotes vs player, 1 denotes vs ai.
+    let gameMode = 0;
+    let gameRunning = false;
 
     const _createPlayers = function () {
         let playerOne = player(document.getElementById("playerOneName").value);
@@ -267,43 +270,54 @@ const gameLogic = (() => {
     const startGame = function () {
         document.getElementById("reset").classList.remove("hidden");
         document.getElementById("start").classList.add("hidden");
+        document.getElementById("playerOneName").disabled = true;
+        document.getElementById("playerTwoName").disabled = true;
         players = [];
         _createPlayers();
         currentPlayer = 1;
+        gameRunning = true;
     };
 
     const resetGame = function () {
         document.getElementById("playerOneName").value = "Player 1";
-        document.getElementById("playerTwoName").value = "Player 2";
         document.getElementById("playerOneScore").innerText = "0";
         document.getElementById("playerTwoScore").innerText = "0";
         document.getElementById("reset").classList.add("hidden");
         document.getElementById("start").classList.remove("hidden");
+        document.getElementById("vsPlayer").classList.remove("hidden");
+        document.getElementById("vsAI").classList.add("hidden");
+        document.getElementById("playerTwoName").value = "Player 2";
+        document.getElementById("playerOneName").disabled = false;
+        document.getElementById("playerTwoName").disabled = false;
         currentPlayer = 0;
+        gameMode = 0;
         gameBoard.requestHandler([0]);
         players.forEach(player => {
             player.requestHandler(2)
         });
+        gameRunning = false;
     };
 
     const changeMode = function (mode) {
-        switch(mode){
-            case 0:
-                document.getElementById("vsPlayer").classList.add("hidden");
-                document.getElementById("vsAI").classList.remove("hidden");
-                document.getElementById("playerTwoName").value = "Robobot";
-                document.getElementById("playerTwoName").disabled = true;
-                break;
-            case 1:
-                document.getElementById("vsPlayer").classList.remove("hidden");
-                document.getElementById("vsAI").classList.add("hidden");
-                document.getElementById("playerTwoName").value = "Player 2";
-                document.getElementById("playerTwoName").disabled = false;
-                break;
-            default:
-                break;
-        }
-    }
+        if(gameRunning === false){
+            switch(mode){
+                case 0:
+                    document.getElementById("vsPlayer").classList.add("hidden");
+                    document.getElementById("vsAI").classList.remove("hidden");
+                    document.getElementById("playerTwoName").value = "Robobot";
+                    document.getElementById("playerTwoName").disabled = true;
+                    break;
+                case 1:
+                    document.getElementById("vsPlayer").classList.remove("hidden");
+                    document.getElementById("vsAI").classList.add("hidden");
+                    document.getElementById("playerTwoName").value = "Player 2";
+                    document.getElementById("playerTwoName").disabled = false;
+                    break;
+                default:
+                    break;
+            };
+        };
+    };
 
     return{
         claimTile,
