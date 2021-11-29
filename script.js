@@ -1,7 +1,7 @@
 let players = [];
 let currentPlayer = 0;
 
-const player = (name,color) => {
+const player = function(name) {
     let score = 0;
 
     //An array of all possible 3-tile long lines where a match can occur.
@@ -33,6 +33,8 @@ const player = (name,color) => {
                 response = [3];
                 break;
         };
+
+        return response;
     };
 
     return {
@@ -83,6 +85,9 @@ const gameBoard = (() => {
             };
         };
 
+        //Function to claim tiles. "Value" is player index in the players list, tile is the coordinates of
+        //a given tile. The function checks if the game is currently in a tied state, if so, it lets a player
+        //claim an already claimed tile.
         const _setTile = function (value,tile) {
             let response = [];
             let tied = _checkTie(tiles);
@@ -225,12 +230,19 @@ const gameBoard = (() => {
 
 const gameLogic = (() => {
 
+    const _createPlayers = function () {
+        let playerOne = player(document.getElementById("playerOneName").value);
+        players.push(playerOne);
+        let playerTwo = player(document.getElementById("playerTwoName").value);
+        players.push(playerTwo);
+    }
+
     const claimTile = function (tile) {
         let response = gameBoard.requestHandler([1,[currentPlayer,tile]]);
-        
-        if(response.length > 1 && response[1][-1] == 2){
-            response = players[currentPlayer-1].requestHandler(1);
 
+        if(response.length > 1 && response[1].slice(-1)[0] === 2){
+            playerResponse = players[currentPlayer-1].requestHandler(1);
+            DOMManipulator.updateScores();
         };
 
         if(response[0] === 0){
@@ -244,10 +256,16 @@ const gameLogic = (() => {
     };
 
     const startGame = function () {
+        players = [];
+        _createPlayers();
         currentPlayer = 1;
     };
 
     const resetGame = function () {
+        document.getElementById("playerOneName").value = "Player 1";
+        document.getElementById("playerTwoName").value = "Player 2";
+        document.getElementById("playerOneScore").innerText = "0";
+        document.getElementById("playerTwoScore").innerText = "0";
         currentPlayer = 0;
         gameBoard.requestHandler([0]);
         players.forEach(player => {
@@ -259,6 +277,22 @@ const gameLogic = (() => {
         claimTile,
         startGame,
         resetGame,
+    };
+
+})();
+
+const DOMManipulator = (() => {
+
+    const updateScores = function () {
+        const scoreOne = document.getElementById("playerOneScore");
+        const scoreTwo = document.getElementById("playerTwoScore");
+
+        scoreOne.innerText = players[0].requestHandler(0)[1];
+        scoreTwo.innerText = players[1].requestHandler(0)[1];
+    };
+
+    return {
+        updateScores
     };
 
 })();
@@ -276,6 +310,8 @@ const initializer = (() => {
 
     const start = function () {
         players = [];
+        document.getElementById("playerOneName").value = "Player 1";
+        document.getElementById("playerTwoName").value = "Player 2";
         _addTileFunctions();
     };
 
