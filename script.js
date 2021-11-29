@@ -70,7 +70,7 @@ const gameBoard = (() => {
                 tiles[tile[0]][tile[1]] = value;
                 response.push(0);
                 const checkMessage = _checkBoard();
-                response += checkMessage;
+                response.push(checkMessage);
             }
             else {
                 response.push(1);
@@ -93,14 +93,14 @@ const gameBoard = (() => {
                 });
             });
             return [3];
-        }
+        };
 
         //Checks every tile in a given line, returns true if they're all the same value to indicate a match,
-        //otherwise returns false.
+        //otherwise returns false. Doesn't report all empties as a match.
         const _checkTiles = function (line) {
             if(line[0] !== 0){
                 return line.every((tile) => {
-                    return [tile === line[0],tile];
+                    return tile === line[0];
                 });
             }
             else {
@@ -112,32 +112,31 @@ const gameBoard = (() => {
         //otherwise returns false.
         const _checkBoard = function () {
             let response = [];
-            let matchFound = false;
+            let matchFound;
             let lineIndex = null;
 
             for(let line of lines){
-                matchFound = _checkTiles(line)[0];
+                matchFound = _checkTiles(line);
 
                 if(matchFound === true){
                     lineIndex = lines.indexOf(line);
                     response.push(5);
                     let message = _resetLine(lineIndex);
                     response.push(message);
-                    response.push(matchFound[1])
                     break;
                 }
                 else {
                     response.push(4);
-                }
+                };
             };
             
             return response;
         };
 
         //Function to handle requests made to the gameboard and report back. Takes input in the form
-        //of an array structured [commandIndex,command]. Command indexes are 0 for a board reset and 1 for
-        //player input. For player input, the command is an array structured as [playerValue,[row,column]].
-        //Returns a response code structured [responseArgs,...].
+        //of an array structured [commandIndex,command]. Command indexes are 0 for a board reset, 1 for
+        //player input and 2 to get board status. For player input, the command is an array structured as
+        //[playerValue,[row,column]]. Returns a response code structured [responseArgs,...].
         const requestHandler = function (request) {
             let response;
             switch(request[0]){
@@ -145,7 +144,10 @@ const gameBoard = (() => {
                     response = _resetBoard();
                     break;
                 case 1:
-                    response = _setTile(request[1]);
+                    response = _setTile(request[1][0],request[1][1]);
+                    break;
+                case 2:
+                    response = tiles;
                     break;
                 default:
                     response = [6];
@@ -156,11 +158,15 @@ const gameBoard = (() => {
 
         return{
           requestHandler,
-          responseMessages
+          responseMessages,
         };
 })();
 
 const gameLogic = (() => {
 
+
+    return{
+
+    }
 
 })();
