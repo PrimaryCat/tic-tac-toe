@@ -1,3 +1,6 @@
+let players = [];
+let currentPlayer = 0;
+
 const player = (name,color) => {
     let score = 0;
 
@@ -44,19 +47,6 @@ const gameBoard = (() => {
         //tile, a tile claimed by Player 1 is indicated by 1 and one claimed by Player 2 is indicated by 2.
         let tiles = [[0,0,0],[0,0,0],[0,0,0]];
 
-        //An array of all possible 3-tile long lines where a match can occur.
-        const lines = [
-            //Horizontal Lines
-            tiles[0],tiles[1],tiles[2],
-            //Vertical Lines
-            [tiles[0][0],tiles[1][0],tiles[2][0]],
-            [tiles[0][1],tiles[1][1],tiles[2][1]],
-            [tiles[0][2],tiles[1][2],tiles[2][2]],
-            //Diagonal Lines
-            [tiles[0][0],tiles[1][1],tiles[2][2]],
-            [tiles[0][2],tiles[1][1],tiles[2][0]],
-        ];
-
         //An array of all the row and column data for each legal 3-tile long lines where a match can occur.
         //Not the cleanest solution, but works for a small number of lines such as this one.
         const lineRef = [
@@ -82,16 +72,59 @@ const gameBoard = (() => {
             "STATUS GOT"
         ];
 
+        const _checkTie = function (array) {
+            const arrayReducer = (prevArray, nextArray) => prevArray.concat(nextArray);
+            let reducedArray = array.reduce(arrayReducer);
+            if(reducedArray.includes(0)){
+                return false;
+            }
+            else{
+                return true;
+            };
+        };
+
         const _setTile = function (value,tile) {
             let response = [];
-            if (tiles[tile[0]][tile[1]] === 0) {
+            let tied = _checkTie(tiles);
+            if(tied === false){
+                if (tiles[tile[0]][tile[1]] === 0) {
+                    tiles[tile[0]][tile[1]] = value;
+                    const tileElem = document.getElementById(`${tile[0]}${tile[1]}`);
+                    let className;
+                    switch(value){
+                        case 1:
+                            className = "playerOneSelect";
+                            break;
+                        case 2:
+                            className = "playerTwoSelect";
+                            break;
+                    };
+                    tileElem.classList.add(className);
+                    response.push(0);
+                    const checkMessage = _checkBoard();
+                    response.push(checkMessage);
+                }
+                else {
+                    response.push(1);
+                };
+            }
+            else{
+                const tileElem = document.getElementById(`${tile[0]}${tile[1]}`);
+                tileElem.classList = ["tile"];
                 tiles[tile[0]][tile[1]] = value;
+                let className;
+                switch(value){
+                    case 1:
+                        className = "playerOneSelect";
+                        break;
+                    case 2:
+                        className = "playerTwoSelect";
+                        break;
+                };
+                tileElem.classList.add(className);
                 response.push(0);
                 const checkMessage = _checkBoard();
                 response.push(checkMessage);
-            }
-            else {
-                response.push(1);
             };
             return response;
         };
@@ -100,16 +133,20 @@ const gameBoard = (() => {
             let matchingLine = lineRef[lineIndex]
             matchingLine.forEach(tile => {
                 tiles[tile[0]][tile[1]] = 0;
+                const tileElem = document.getElementById(`${tile[0]}${tile[1]}`);
+                tileElem.classList = ["tile"];
             });
             return 2;
         };
 
         const _resetBoard = function () {
-            tiles.forEach(row => {
-                row.forEach(tile => {
-                    tile = 0;
-                });
-            });
+            for(let x = 0; x < 3; x++){
+                for(let y = 0; y < 3; y++){
+                    const tileElem = document.getElementById(`${x}${y}`);
+                    tileElem.classList = ["tile"];
+                    tiles[x][y] = 0;
+                };
+            };
             return [3];
         };
 
@@ -133,11 +170,17 @@ const gameBoard = (() => {
             let matchFound;
             let lineIndex = null;
 
-            for(let line of lines){
+            for(let ref of lineRef){
+                let line = [];
+                
+                line.push(tiles[ref[0][0]][ref[0][1]]);
+                line.push(tiles[ref[1][0]][ref[1][1]]);
+                line.push(tiles[ref[2][0]][ref[2][1]]);
+
                 matchFound = _checkTiles(line);
 
                 if(matchFound === true){
-                    lineIndex = lines.indexOf(line);
+                    lineIndex = lineRef.indexOf(ref);
                     response.push(5);
                     let message = _resetLine(lineIndex);
                     response.push(message);
@@ -147,7 +190,7 @@ const gameBoard = (() => {
                     response.push(4);
                 };
             };
-            
+        
             return response;
         };
 
@@ -182,9 +225,63 @@ const gameBoard = (() => {
 
 const gameLogic = (() => {
 
+    const claimTile = function (tile) {
+        let response = gameBoard.requestHandler([1,[currentPlayer,tile]]);
+        
+        if(response.length > 1 && response[1][-1] == 2){
+            response = players[currentPlayer-1].requestHandler(1);
+
+        };
+
+        if(response[0] === 0){
+            if(currentPlayer === 1){
+                currentPlayer = 2;
+            }
+            else if(currentPlayer === 2){
+                currentPlayer = 1;
+            };
+        };
+    };
+
+    const startGame = function () {
+        currentPlayer = 1;
+    };
+
+    const resetGame = function () {
+        currentPlayer = 0;
+        gameBoard.requestHandler([0]);
+        players.forEach(player => {
+            player.requestHandler(2)
+        });
+    };
 
     return{
-
-    }
+        claimTile,
+        startGame,
+        resetGame,
+    };
 
 })();
+
+const initializer = (() => {
+
+    const _addTileFunctions = function () {
+        const tiles = document.querySelectorAll(".tile")
+        tiles.forEach(element => {
+            element.onclick = () => gameLogic.claimTile([parseInt(element.id[0]),parseInt(element.id[1])]);
+        });
+        document.getElementById("start").onclick = () => gameLogic.startGame();
+        document.getElementById("reset").onclick = () => gameLogic.resetGame();
+    };
+
+    const start = function () {
+        players = [];
+        _addTileFunctions();
+    };
+
+    return {
+        start
+    };
+})();
+
+initializer.start()
