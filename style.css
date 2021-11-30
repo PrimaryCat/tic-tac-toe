@@ -11,6 +11,7 @@ html, body {
     padding: 0;
     height: 100%;
     width: 100%;
+    font-family: Paytone One, sans-serif;
 }
 
 input, textarea, select {
@@ -112,6 +113,7 @@ input[type="text"]:disabled {
     width: 100%;
     position: absolute;
     font-size: 5vh;
+    padding-bottom: 5px;
 }
 
 #timerText {
