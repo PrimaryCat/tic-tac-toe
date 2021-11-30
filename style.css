@@ -292,9 +292,19 @@ input[type="text"]:disabled {
     animation-fill-mode: forwards;
 }
 
+.round {
+    animation: round 0.7s;
+    animation-fill-mode: forwards;
+}
+
 /* ANIMATION */
 
 @keyframes shrink {
-    0% {width: 100%;}
-    100% {width: 10%;}
+    0% {width: 100%;border-radius: 20px;}
+    100% {width: 10%;border-radius: 50%;}
+}
+
+@keyframes round {
+    0% {width: 99%;border-radius: 20px;}
+    100% {width: 87%;border-radius: 50%;}
 }

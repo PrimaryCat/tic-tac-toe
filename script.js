@@ -416,6 +416,7 @@ const DOMManipulator = (() => {
         document.getElementById("timerSetter").classList.remove("hidden");
         document.getElementById("timerDisplay").classList.add("hidden");
         document.getElementById("topCenter").classList.remove("shrink");
+        document.getElementById("messageBox").classList.remove("round");
     };
 
     const startDOM = function () {
@@ -426,6 +427,7 @@ const DOMManipulator = (() => {
         document.getElementById("timerSetter").classList.add("hidden");
         document.getElementById("timerDisplay").classList.remove("hidden");
         document.getElementById("topCenter").classList.add("shrink");
+        document.getElementById("messageBox").classList.add("round");
     };
 
     const setTimer = function (timer) {
