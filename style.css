@@ -23,17 +23,20 @@ input, textarea, select {
 :root {
     --background: rgb(255, 217, 0);
     --foreground: black;
+    --foreground-light: rgba(0, 0, 0, 0.6);
     --highlight: rgb(255, 255, 255);
     --shadow: rgba(255, 0, 0, 0.25);
-    --dark-shadow: rgba(0, 0, 0, 0.25);
+    --dark-shadow: rgba(0, 0, 0, 0.205);
     --accent-one: rgba(255, 217, 0, 0.5);
     --accent-one-dark: rgb(224, 193, 16);
     --accent-one-darker: rgb(199, 166, 18);
     --accent-two: rgb(236, 47, 47);
-    --accent-two-dark: rgb(185, 46, 46);
+    --accent-two-light: rgb(241, 59, 59);
+    --accent-two-dark: rgb(185, 46, 46);    
     --accent-three: rgb(58, 207, 71);
     --accent-three-dark: rgb(35, 150, 45);
     --accent-three-darker: rgb(29, 134, 38);
+    --accent-three-soft-light: rgb(69, 218, 82);
     --accent-three-light: rgba(138, 255, 144, 0.596);
 }
 
@@ -145,9 +148,18 @@ input[type="text"]:disabled {
     background-color: var(--accent-three);
 }
 
+#vsAI:hover, #reset:hover {
+    background-color: var(--accent-two-light);
+}
+
+#vsPlayer:hover, #start:hover {
+    background-color: var(--accent-three-soft-light);
+}
+
 #playerOne {
     width: 100%;
     grid-area: playerOne;
+    color: var(--accent-two-dark);
 }
 
 #centerCard {
@@ -159,6 +171,7 @@ input[type="text"]:disabled {
     justify-items: center;
     border: 10px solid;
     border-color: white;
+    color: var(--background);
 }
 
 #startTimer {
@@ -167,6 +180,7 @@ input[type="text"]:disabled {
     background-color: white;
     font-size: 30vh;
     font-weight: bolder;
+    color: var(--background);
 }
 
 #gameBoard {
@@ -183,6 +197,7 @@ input[type="text"]:disabled {
 #playerTwo {
     width: 100%;
     grid-area: playerTwo;
+    color: var(--accent-three-dark);
 }
 
 #aiToggle {
@@ -217,14 +232,12 @@ input[type="text"]:disabled {
     border-right: 5px solid;
     border-bottom: 5px solid;
     border-color: var(--dark-shadow);
-}
-
-.button:hover {
-    box-shadow: 3px 3px var(--shadow)
+    box-shadow: 3px 3px var(--shadow);
 }
 
 .button:active {
     scale: 0.95;
+    box-shadow: none;
 }
 
 .timerButton {
@@ -259,6 +272,7 @@ input[type="text"]:disabled {
 }
 
 .card {
+    position: relative;
     background-color: white;
     height: 100%;
     border-radius: 20px;
@@ -267,7 +281,9 @@ input[type="text"]:disabled {
 }
 
 .scoreField {
+    position: absolute;
     font-size: 4vh;
+    bottom: 5%
 }
 
 .flexCenter {

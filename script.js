@@ -488,16 +488,16 @@ const DOMManipulator = (() => {
     };
 
     const resetDOM = function () {
-        document.getElementById("playerOneName").value = "Player 1";
         document.getElementById("playerOneScore").innerText = "0";
         document.getElementById("playerTwoScore").innerText = "0";
         document.getElementById("reset").classList.add("hidden");
         document.getElementById("start").classList.remove("hidden");
         document.getElementById("vsPlayer").classList.remove("hidden");
         document.getElementById("vsAI").classList.add("hidden");
-        document.getElementById("playerTwoName").value = "Player 2";
         document.getElementById("playerOneName").disabled = false;
         document.getElementById("playerTwoName").disabled = false;
+        document.getElementById("playerOneName").style.color = "var(--foreground)";
+        document.getElementById("playerTwoName").style.color = "var(--foreground)";
         document.getElementById("threeSecondButton").classList.add("tButtonOn")
         document.getElementById("fiveSecondButton").classList.remove("tButtonOn")
         document.getElementById("timerSetter").classList.remove("hidden");
@@ -511,6 +511,8 @@ const DOMManipulator = (() => {
         document.getElementById("start").classList.add("hidden");
         document.getElementById("playerOneName").disabled = true;
         document.getElementById("playerTwoName").disabled = true;
+        document.getElementById("playerOneName").style.color = "var(--foreground-light)";
+        document.getElementById("playerTwoName").style.color = "var(--foreground-light)";
         document.getElementById("timerSetter").classList.add("hidden");
         document.getElementById("timerDisplay").classList.remove("hidden");
         document.getElementById("topCenter").classList.add("shrink");
