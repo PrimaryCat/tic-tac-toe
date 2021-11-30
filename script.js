@@ -270,6 +270,7 @@ const gameLogic = (() => {
         else if(currentPlayer === 2){
             currentPlayer = 1;
         };
+        DOMManipulator.updateTurn(currentPlayer);
     };
 
     const startGame = function () {
@@ -279,6 +280,7 @@ const gameLogic = (() => {
         _createPlayers();
         //Set the current player to Player 1.
         currentPlayer = 1;
+        DOMManipulator.updateTurn(currentPlayer);
         //Start the game.
         gameRunning = true;
         //Update the DOM.
@@ -290,6 +292,7 @@ const gameLogic = (() => {
     const resetGame = function () {
         //Clear current player.
         currentPlayer = 0;
+        DOMManipulator.updateTurn(currentPlayer);
         //Set game mode to vs. Player.
         gameMode = 0;
         //Reset board.
@@ -369,6 +372,21 @@ const timer = (() => {
 })();
 
 const DOMManipulator = (() => {
+
+    const updateTurn = function (player) {
+        const indicator = document.getElementById("centerCard")
+        switch(player){
+            case 1:
+                indicator.style.borderColor = "var(--accent-two)";
+                break;
+            case 2:
+                indicator.style.borderColor = "var(--accent-three)";
+                break;
+            default:
+                indicator.style.borderColor = "white";
+                break;
+        }
+    }
 
     const updateScores = function () {
         const scoreOne = document.getElementById("playerOneScore");
@@ -467,7 +485,8 @@ const DOMManipulator = (() => {
         startDOM,
         changeDOMMode,
         setTimer,
-        updateTimer
+        updateTimer,
+        updateTurn
     };
 
 })();
