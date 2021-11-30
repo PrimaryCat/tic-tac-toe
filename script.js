@@ -297,6 +297,8 @@ const gameLogic = (() => {
         });
         //Stop the game.
         gameRunning = false;
+        //Reset the timer.
+        timer.resetTimer();
         //Reset the DOM.
         DOMManipulator.resetDOM();
     };
@@ -318,11 +320,11 @@ const gameLogic = (() => {
 })();
 
 const timer = (() => {
-    let timeSet = 0;
+    let timeSet = 3;
     let timeLeft = 0;
 
     const _countDown = function () {
-
+        DOMManipulator.updateTimer(timeLeft);
     };
 
     const setTime = function (time) {
@@ -330,8 +332,21 @@ const timer = (() => {
         DOMManipulator.setTimer(time);
     };
 
+    const startTimer = function () {
+
+    };
+
+    const stopTimer = function () {
+
+    };
+
+    const resetTimer = function () {
+        let timeSet = 3;
+    };
+
     return{
         setTime,
+        resetTimer,
     }
 })();
 
@@ -343,6 +358,11 @@ const DOMManipulator = (() => {
         scoreOne.innerText = players[0].requestHandler(0)[1];
         scoreTwo.innerText = players[1].requestHandler(0)[1];
     };
+
+    const updateTimer = function (time) {
+        const timerText = document.getElementById("timerDisplayText");
+        timerText.innerText = time;
+    }
 
     const resetDOM = function () {
         document.getElementById("playerOneName").value = "Player 1";
@@ -357,6 +377,9 @@ const DOMManipulator = (() => {
         document.getElementById("playerTwoName").disabled = false;
         document.getElementById("threeSecondButton").classList.add("tButtonOn")
         document.getElementById("fiveSecondButton").classList.remove("tButtonOn")
+        document.getElementById("timerSetter").classList.remove("hidden");
+        document.getElementById("timerDisplay").classList.add("hidden");
+        document.getElementById("topCenter").classList.remove("shrink");
     };
 
     const startDOM = function () {
@@ -364,6 +387,9 @@ const DOMManipulator = (() => {
         document.getElementById("start").classList.add("hidden");
         document.getElementById("playerOneName").disabled = true;
         document.getElementById("playerTwoName").disabled = true;
+        document.getElementById("timerSetter").classList.add("hidden");
+        document.getElementById("timerDisplay").classList.remove("hidden");
+        document.getElementById("topCenter").classList.add("shrink");
     };
 
     const setTimer = function (timer) {
@@ -402,7 +428,8 @@ const DOMManipulator = (() => {
         resetDOM,
         startDOM,
         changeDOMMode,
-        setTimer
+        setTimer,
+        updateTimer
     };
 
 })();

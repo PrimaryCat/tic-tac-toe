@@ -75,6 +75,7 @@ input[type="text"]:disabled {
 }
 
 #topCenter {
+    position: relative;
     grid-area: message;
     width: 100%;
     height: 100%;
@@ -84,9 +85,11 @@ input[type="text"]:disabled {
     color: white;
     font-weight: bolder;
     font-size: 24px;
+    user-select: none;
 }
 
 #messageBox {
+    position: relative;
     width: 99%;
     height: 90%;
     background-color: var(--accent-three-dark);
@@ -94,7 +97,14 @@ input[type="text"]:disabled {
 }
 
 #timerSetter {
+    position: absolute;
     width: 100%;
+}
+
+#timerDisplay {
+    width: 100%;
+    position: absolute;
+    font-size: 36px;
 }
 
 #timerText {
@@ -213,6 +223,7 @@ input[type="text"]:disabled {
     border-bottom: 2px solid;
     border-top: 2px solid;
     border-color: var(--accent-three-light);
+    cursor: pointer;
 }
 
 .tButtonOn {
@@ -273,4 +284,14 @@ input[type="text"]:disabled {
     visibility: hidden;
 }
 
+.shrink {
+    animation: shrink 0.7s;
+    animation-fill-mode: forwards;
+}
+
 /* ANIMATION */
+
+@keyframes shrink {
+    0% {width: 100%;}
+    100% {width: 10%;}
+}
