@@ -276,7 +276,7 @@ const gameLogic = (() => {
             DOMManipulator.updateTurn;
             timer.stopTimer();
             gameRunning = false;
-            DOMManipulator.displayWinner(endArray[1].requestHandler(3)[1]);
+            DOMManipulator.displayWinner(endArray[1]);
         }
     };
 
@@ -488,10 +488,19 @@ const DOMManipulator = (() => {
         timerDiv.classList.toggle("hidden");
     };
 
-    const displayWinner = function (name) {
+    const displayWinner = function (player) {
         const winnerName = document.getElementById("winnerName");
-        winnerName.innerText = name;
+        winnerName.innerText = player.requestHandler(3)[1];
         document.getElementById("endCard").classList.remove("hidden");
+        const playerIndex = players.indexOf(player);
+        switch(playerIndex){
+            case 0:
+                winnerName.style.color = "var(--accent-two-dark)";
+                break;
+            case 1:
+                winnerName.style.color = "var(--accent-three-dark)";
+                break;
+        };
     };
 
     const resetDOM = function () {
