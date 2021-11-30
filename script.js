@@ -369,6 +369,8 @@ const gameLogic = (() => {
     const changeMode = function (mode) {
         if(gameRunning === false){
                 DOMManipulator.changeDOMMode(mode);
+                gameMode = mode;
+                console.log(gameMode)
             };
     };
 
@@ -552,13 +554,13 @@ const DOMManipulator = (() => {
 
     const changeDOMMode = function (mode) {
         switch(mode){
-            case 0:
+            case 1:
                 document.getElementById("vsPlayer").classList.add("hidden");
                 document.getElementById("vsAI").classList.remove("hidden");
                 document.getElementById("playerTwoName").value = "Robobot";
                 document.getElementById("playerTwoName").disabled = true;
                 break;
-            case 1:
+            case 0:
                 document.getElementById("vsPlayer").classList.remove("hidden");
                 document.getElementById("vsAI").classList.add("hidden");
                 document.getElementById("playerTwoName").value = "Player 2";
@@ -594,8 +596,8 @@ const initializer = (() => {
     const _addButtonFunctions = function () {
         document.getElementById("start").onclick = () => gameLogic.startTimer();
         document.getElementById("reset").onclick = () => gameLogic.resetGame();
-        document.getElementById("vsPlayer").onclick = () => gameLogic.changeMode(0);
-        document.getElementById("vsAI").onclick = () => gameLogic.changeMode(1);
+        document.getElementById("vsPlayer").onclick = () => gameLogic.changeMode(1);
+        document.getElementById("vsAI").onclick = () => gameLogic.changeMode(0);
         document.getElementById("threeSecondButton").onclick = () => timer.setTime(3);
         document.getElementById("fiveSecondButton").onclick = () => timer.setTime(5);
     };
