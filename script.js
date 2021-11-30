@@ -259,6 +259,7 @@ const gameLogic = (() => {
 
         if(response[0] === 0){
             changeTurn();
+            timer.resetTimer();
         };
     };
 
@@ -282,6 +283,8 @@ const gameLogic = (() => {
         gameRunning = true;
         //Update the DOM.
         DOMManipulator.startDOM();
+        //start the turn timer.
+        timer.startTimer();
     };
 
     const resetGame = function () {
@@ -297,8 +300,12 @@ const gameLogic = (() => {
         });
         //Stop the game.
         gameRunning = false;
+        //Stop the timer.
+        timer.stopTimer();
         //Reset the timer.
         timer.resetTimer();
+        //Reset the timer.
+        timer.setTime(3);
         //Reset the DOM.
         DOMManipulator.resetDOM();
     };
@@ -322,9 +329,16 @@ const gameLogic = (() => {
 const timer = (() => {
     let timeSet = 3;
     let timeLeft = 0;
+    let timerVar;
 
     const _countDown = function () {
+        timeLeft--;
         DOMManipulator.updateTimer(timeLeft);
+        if(timeLeft === 0){
+            resetTimer();
+            DOMManipulator.updateTimer(timeLeft);
+            gameLogic.changeTurn();
+        }
     };
 
     const setTime = function (time) {
@@ -333,20 +347,24 @@ const timer = (() => {
     };
 
     const startTimer = function () {
-
+        resetTimer();
+        timerVar = window.setInterval(_countDown,1000);
     };
 
     const stopTimer = function () {
-
+        window.clearInterval(timerVar)
     };
 
     const resetTimer = function () {
-        let timeSet = 3;
+        timeLeft = timeSet;
+        DOMManipulator.updateTimer(timeLeft);
     };
 
     return{
         setTime,
         resetTimer,
+        startTimer,
+        stopTimer
     }
 })();
 
