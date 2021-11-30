@@ -123,11 +123,15 @@ input[type="text"]:disabled {
 #threeSecondButton {
     border-left: 2px solid;
     border-color: var(--accent-three-light);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
 }
 
 #fiveSecondButton {
     border-right: 2px solid;
     border-color: var(--accent-three-light);
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 #vsAI {
