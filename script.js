@@ -258,12 +258,16 @@ const gameLogic = (() => {
         };
 
         if(response[0] === 0){
-            if(currentPlayer === 1){
-                currentPlayer = 2;
-            }
-            else if(currentPlayer === 2){
-                currentPlayer = 1;
-            };
+            changeTurn();
+        };
+    };
+
+    const changeTurn = function () {
+        if(currentPlayer === 1){
+            currentPlayer = 2;
+        }
+        else if(currentPlayer === 2){
+            currentPlayer = 1;
         };
     };
 
@@ -323,9 +327,27 @@ const gameLogic = (() => {
         claimTile,
         startGame,
         resetGame,
-        changeMode
+        changeMode,
+        changeTurn
     };
 
+})();
+
+const timer = (() => {
+    let timeSet = 0;
+    let timeLeft = 0;
+
+    const _countDown = function () {
+
+    };
+
+    const setTime = function (time) {
+        timeSet = time;
+    };
+
+    return{
+        setTime,
+    }
 })();
 
 const DOMManipulator = (() => {
