@@ -255,6 +255,30 @@ const gameLogic = (() => {
         DOMManipulator.updateStartTimer(startTimerTimeout);
     };
 
+    const _checkWin = function () {
+        let gameEnd = false;
+        if(players[0].requestHandler(0)[1] === 5){
+            gameEnd = true;
+            return [gameEnd,players[0]];
+        }
+        else if(players[1].requestHandler(0)[1] === 5){
+            gameEnd = true;
+            return [gameEnd,players[1]];
+        }
+        else {
+            return [gameEnd];
+        };
+    }
+
+    const _endGame = function (endArray) {
+        if(endArray[0] === true){
+            currentPlayer = 0;
+            DOMManipulator.updateTurn;
+            timer.stopTimer();
+            gameRunning = false;
+        }
+    };
+
     const _stopTimer = function () {
         window.clearInterval(startTimerVar)
     };
@@ -303,6 +327,8 @@ const gameLogic = (() => {
             changeTurn();
             timer.resetTimer();
         };
+
+        _endGame(_checkWin());
     };
 
     const changeTurn = function () {
