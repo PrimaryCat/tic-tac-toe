@@ -327,6 +327,7 @@ const timer = (() => {
 
     const setTime = function (time) {
         timeSet = time;
+        DOMManipulator.setTimer(time);
     };
 
     return{
@@ -354,6 +355,8 @@ const DOMManipulator = (() => {
         document.getElementById("playerTwoName").value = "Player 2";
         document.getElementById("playerOneName").disabled = false;
         document.getElementById("playerTwoName").disabled = false;
+        document.getElementById("threeSecondButton").classList.add("tButtonOn")
+        document.getElementById("fiveSecondButton").classList.remove("tButtonOn")
     };
 
     const startDOM = function () {
@@ -362,6 +365,20 @@ const DOMManipulator = (() => {
         document.getElementById("playerOneName").disabled = true;
         document.getElementById("playerTwoName").disabled = true;
     };
+
+    const setTimer = function (timer) {
+        switch(timer){
+            case 3:
+                document.getElementById("threeSecondButton").classList.add("tButtonOn")
+                document.getElementById("fiveSecondButton").classList.remove("tButtonOn")
+                break;
+            case 5:
+                document.getElementById("fiveSecondButton").classList.add("tButtonOn")
+                document.getElementById("threeSecondButton").classList.remove("tButtonOn")
+                break;
+        }
+
+    }
 
     const changeDOMMode = function (mode) {
         switch(mode){
@@ -384,7 +401,8 @@ const DOMManipulator = (() => {
         updateScores,
         resetDOM,
         startDOM,
-        changeDOMMode
+        changeDOMMode,
+        setTimer
     };
 
 })();
@@ -396,10 +414,15 @@ const initializer = (() => {
         tiles.forEach(element => {
             element.onclick = () => gameLogic.claimTile([parseInt(element.id[0]),parseInt(element.id[1])]);
         });
+    };
+
+    const _addButtonFunctions = function () {
         document.getElementById("start").onclick = () => gameLogic.startGame();
         document.getElementById("reset").onclick = () => gameLogic.resetGame();
         document.getElementById("vsPlayer").onclick = () => gameLogic.changeMode(0);
         document.getElementById("vsAI").onclick = () => gameLogic.changeMode(1);
+        document.getElementById("threeSecondButton").onclick = () => timer.setTime(3);
+        document.getElementById("fiveSecondButton").onclick = () => timer.setTime(5);
     };
 
     const start = function () {
@@ -407,6 +430,7 @@ const initializer = (() => {
         document.getElementById("playerOneName").value = "Player 1";
         document.getElementById("playerTwoName").value = "Player 2";
         _addTileFunctions();
+        _addButtonFunctions();
     };
 
     return {
