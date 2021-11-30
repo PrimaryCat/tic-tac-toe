@@ -23,12 +23,15 @@ input, textarea, select {
 :root {
     --background: rgb(255, 217, 0);
     --foreground: black;
-    --highlight: rgba(255, 255, 255, 0.25);
+    --highlight: rgb(255, 255, 255);
     --shadow: rgba(255, 0, 0, 0.25);
     --dark-shadow: rgba(0, 0, 0, 0.25);
     --accent-one: rgba(255, 217, 0, 0.5);
     --accent-two: rgb(236, 47, 47);
     --accent-three: rgb(58, 207, 71);
+    --accent-three-dark: rgb(35, 150, 45);
+    --accent-three-darker: rgb(29, 134, 38);
+    --accent-three-light: rgba(138, 255, 144, 0.596);
 }
 
 body {
@@ -65,10 +68,47 @@ input[type="text"]:disabled {
     grid-template-columns: 20% 50% 20%;
     gap: 5%;
     grid-template-areas: 
-    "reset title ai"
+    "reset message ai"
     "playerOne gameBoard playerTwo";
     justify-items: center;
     align-content: center;
+}
+
+#topCenter {
+    grid-area: message;
+    width: 100%;
+    height: 100%;
+    background-color: var(--accent-three);
+    border-radius: 20px;
+    box-shadow: 3px 3px var(--shadow);
+    color: white;
+    font-weight: bolder;
+    font-size: 24px;
+}
+
+#messageBox {
+    width: 99%;
+    height: 90%;
+    background-color: var(--accent-three-dark);
+    border-radius: 15px;
+}
+
+#timerSetter {
+    width: 100%;
+}
+
+#timerText {
+    margin-right: 5%;
+}
+
+#threeSecondButton {
+    border-left: 2px solid;
+    border-color: var(--accent-three-light);
+}
+
+#fiveSecondButton {
+    border-right: 2px solid;
+    border-color: var(--accent-three-light);
 }
 
 #vsAI {
@@ -163,6 +203,20 @@ input[type="text"]:disabled {
 
 .button:active {
     scale: 0.95;
+}
+
+.timerButton {
+    background-color: var(--accent-three-darker);
+    width: 20%;
+    border: none;
+    color: white;
+    border-bottom: 2px solid;
+    border-top: 2px solid;
+    border-color: var(--accent-three-light);
+}
+
+.tButtonOn {
+    background-color: var(--accent-three);
 }
 
 .tile {
