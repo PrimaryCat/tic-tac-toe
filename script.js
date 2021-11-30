@@ -242,12 +242,53 @@ const gameLogic = (() => {
     let gameMode = 0;
     let gameRunning = false;
 
+    let startTimerVar;
+    let startTimerTimeout;
+
+    const _countDown = function () {
+        startTimerTimeout--;
+        if(startTimerTimeout === 0){
+            _stopTimer();
+            DOMManipulator.toggleStartTimer();
+            _startGame();
+        };
+        DOMManipulator.updateStartTimer(startTimerTimeout);
+    };
+
+    const _stopTimer = function () {
+        window.clearInterval(startTimerVar)
+    };
+
     const _createPlayers = function () {
         let playerOne = player(document.getElementById("playerOneName").value);
         players.push(playerOne);
         let playerTwo = player(document.getElementById("playerTwoName").value);
         players.push(playerTwo);
     }
+
+    const _startGame = function () {
+        //Clear player list.
+        players = [];
+        //Create new players.
+        _createPlayers();
+        //Set the current player to Player 1.
+        currentPlayer = 1;
+        DOMManipulator.updateTurn(currentPlayer);
+        //Start the game.
+        gameRunning = true;
+        //Update the DOM.
+        DOMManipulator.startDOM();
+        //start the turn timer.
+        timer.startTimer();
+    };
+
+    const startTimer = function () {
+        window.clearInterval(startTimerVar);
+        DOMManipulator.toggleStartTimer();
+        startTimerTimeout = 3;
+        DOMManipulator.updateStartTimer(startTimerTimeout);
+        startTimerVar = window.setInterval(_countDown,1000);
+    };
 
     const claimTile = function (tile) {
         let response = gameBoard.requestHandler([1,[currentPlayer,tile]]);
@@ -271,22 +312,6 @@ const gameLogic = (() => {
             currentPlayer = 1;
         };
         DOMManipulator.updateTurn(currentPlayer);
-    };
-
-    const startGame = function () {
-        //Clear player list.
-        players = [];
-        //Create new players.
-        _createPlayers();
-        //Set the current player to Player 1.
-        currentPlayer = 1;
-        DOMManipulator.updateTurn(currentPlayer);
-        //Start the game.
-        gameRunning = true;
-        //Update the DOM.
-        DOMManipulator.startDOM();
-        //start the turn timer.
-        timer.startTimer();
     };
 
     const resetGame = function () {
@@ -321,7 +346,7 @@ const gameLogic = (() => {
 
     return{
         claimTile,
-        startGame,
+        startTimer,
         resetGame,
         changeMode,
         changeTurn
@@ -416,7 +441,17 @@ const DOMManipulator = (() => {
                 messageBox.style.backgroundColor = "var(--accent-three-dark)";
                 break;
         };
-    }
+    };
+
+    const updateStartTimer = function (time) {
+        const timerText = document.getElementById("startTimerText");
+        timerText.innerText = time;
+    };
+
+    const toggleStartTimer = function () {
+        const timerDiv = document.getElementById("startTimer");
+        timerDiv.classList.toggle("hidden");
+    };
 
     const resetDOM = function () {
         document.getElementById("playerOneName").value = "Player 1";
@@ -486,7 +521,9 @@ const DOMManipulator = (() => {
         changeDOMMode,
         setTimer,
         updateTimer,
-        updateTurn
+        updateTurn,
+        updateStartTimer,
+        toggleStartTimer
     };
 
 })();
@@ -501,7 +538,7 @@ const initializer = (() => {
     };
 
     const _addButtonFunctions = function () {
-        document.getElementById("start").onclick = () => gameLogic.startGame();
+        document.getElementById("start").onclick = () => gameLogic.startTimer();
         document.getElementById("reset").onclick = () => gameLogic.resetGame();
         document.getElementById("vsPlayer").onclick = () => gameLogic.changeMode(0);
         document.getElementById("vsAI").onclick = () => gameLogic.changeMode(1);
