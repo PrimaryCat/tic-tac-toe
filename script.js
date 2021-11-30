@@ -272,55 +272,37 @@ const gameLogic = (() => {
     };
 
     const startGame = function () {
-        document.getElementById("reset").classList.remove("hidden");
-        document.getElementById("start").classList.add("hidden");
-        document.getElementById("playerOneName").disabled = true;
-        document.getElementById("playerTwoName").disabled = true;
+        //Clear player list.
         players = [];
+        //Create new players.
         _createPlayers();
+        //Set the current player to Player 1.
         currentPlayer = 1;
+        //Start the game.
         gameRunning = true;
     };
 
     const resetGame = function () {
-        document.getElementById("playerOneName").value = "Player 1";
-        document.getElementById("playerOneScore").innerText = "0";
-        document.getElementById("playerTwoScore").innerText = "0";
-        document.getElementById("reset").classList.add("hidden");
-        document.getElementById("start").classList.remove("hidden");
-        document.getElementById("vsPlayer").classList.remove("hidden");
-        document.getElementById("vsAI").classList.add("hidden");
-        document.getElementById("playerTwoName").value = "Player 2";
-        document.getElementById("playerOneName").disabled = false;
-        document.getElementById("playerTwoName").disabled = false;
+        //Clear current player.
         currentPlayer = 0;
+        //Set game mode to vs. Player.
         gameMode = 0;
+        //Reset board.
         gameBoard.requestHandler([0]);
+        //Reset player scores.
         players.forEach(player => {
             player.requestHandler(2)
         });
+        //Stop the game.
         gameRunning = false;
+        //Reset the DOM.
+        DOMManipulator.resetDOM();
     };
 
     const changeMode = function (mode) {
         if(gameRunning === false){
-            switch(mode){
-                case 0:
-                    document.getElementById("vsPlayer").classList.add("hidden");
-                    document.getElementById("vsAI").classList.remove("hidden");
-                    document.getElementById("playerTwoName").value = "Robobot";
-                    document.getElementById("playerTwoName").disabled = true;
-                    break;
-                case 1:
-                    document.getElementById("vsPlayer").classList.remove("hidden");
-                    document.getElementById("vsAI").classList.add("hidden");
-                    document.getElementById("playerTwoName").value = "Player 2";
-                    document.getElementById("playerTwoName").disabled = false;
-                    break;
-                default:
-                    break;
+                DOMManipulator.changeDOMMOde(mode);
             };
-        };
     };
 
     return{
@@ -355,13 +337,52 @@ const DOMManipulator = (() => {
     const updateScores = function () {
         const scoreOne = document.getElementById("playerOneScore");
         const scoreTwo = document.getElementById("playerTwoScore");
-
         scoreOne.innerText = players[0].requestHandler(0)[1];
         scoreTwo.innerText = players[1].requestHandler(0)[1];
     };
 
+    const resetDOM = function () {
+        document.getElementById("playerOneName").value = "Player 1";
+        document.getElementById("playerOneScore").innerText = "0";
+        document.getElementById("playerTwoScore").innerText = "0";
+        document.getElementById("reset").classList.add("hidden");
+        document.getElementById("start").classList.remove("hidden");
+        document.getElementById("vsPlayer").classList.remove("hidden");
+        document.getElementById("vsAI").classList.add("hidden");
+        document.getElementById("playerTwoName").value = "Player 2";
+        document.getElementById("playerOneName").disabled = false;
+        document.getElementById("playerTwoName").disabled = false;
+    };
+
+    const startDOM = function () {
+        document.getElementById("reset").classList.remove("hidden");
+        document.getElementById("start").classList.add("hidden");
+        document.getElementById("playerOneName").disabled = true;
+        document.getElementById("playerTwoName").disabled = true;
+    };
+
+    const changeDOMMode = function (mode) {
+        switch(mode){
+            case 0:
+                document.getElementById("vsPlayer").classList.add("hidden");
+                document.getElementById("vsAI").classList.remove("hidden");
+                document.getElementById("playerTwoName").value = "Robobot";
+                document.getElementById("playerTwoName").disabled = true;
+                break;
+            case 1:
+                document.getElementById("vsPlayer").classList.remove("hidden");
+                document.getElementById("vsAI").classList.add("hidden");
+                document.getElementById("playerTwoName").value = "Player 2";
+                document.getElementById("playerTwoName").disabled = false;
+                break;
+        };
+    };
+
     return {
-        updateScores
+        updateScores,
+        resetDOM,
+        startDOM,
+        changeDOMMode
     };
 
 })();
