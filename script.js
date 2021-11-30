@@ -361,7 +361,25 @@ const DOMManipulator = (() => {
 
     const updateTimer = function (time) {
         const timerText = document.getElementById("timerDisplayText");
+        const topCenter = document.getElementById("topCenter");
+        const messageBox = document.getElementById("messageBox");
+
         timerText.innerText = time;
+
+        switch(time){
+            case 2:
+                topCenter.style.backgroundColor = "var(--accent-one-dark)";
+                messageBox.style.backgroundColor = "var(--accent-one-darker)";
+                break;
+            case 1:
+                topCenter.style.backgroundColor = "var(--accent-two)";
+                messageBox.style.backgroundColor = "var(--accent-two-dark)";
+                break;
+            default:
+                topCenter.style.backgroundColor = "var(--accent-three)";
+                messageBox.style.backgroundColor = "var(--accent-three-dark)";
+                break;
+        };
     }
 
     const resetDOM = function () {
