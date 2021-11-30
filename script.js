@@ -280,6 +280,8 @@ const gameLogic = (() => {
         currentPlayer = 1;
         //Start the game.
         gameRunning = true;
+        //Update the DOM.
+        DOMManipulator.startDOM();
     };
 
     const resetGame = function () {
@@ -301,7 +303,7 @@ const gameLogic = (() => {
 
     const changeMode = function (mode) {
         if(gameRunning === false){
-                DOMManipulator.changeDOMMOde(mode);
+                DOMManipulator.changeDOMMode(mode);
             };
     };
 
