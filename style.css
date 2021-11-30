@@ -48,7 +48,7 @@ input[type="text"] {
     border-bottom: 3px solid var(--accent-one);
     text-align: center;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 3vh;
 }
 
 input[type="text"]:focus {
@@ -102,12 +102,13 @@ input[type="text"]:disabled {
 #timerSetter {
     position: absolute;
     width: 100%;
+    font-size: 4vh;
 }
 
 #timerDisplay {
     width: 100%;
     position: absolute;
-    font-size: 36px;
+    font-size: 5vh;
 }
 
 #timerText {
@@ -164,7 +165,7 @@ input[type="text"]:disabled {
     display: absolute;
     z-index: 2;
     background-color: white;
-    font-size: 10em;
+    font-size: 30vh;
     font-weight: bolder;
 }
 
@@ -177,10 +178,6 @@ input[type="text"]:disabled {
     padding: 5%;
     align-items: center;
     justify-content: center;
-}
-
-#ruleCard {
-    visibility: hidden;
 }
 
 #playerTwo {
@@ -216,7 +213,7 @@ input[type="text"]:disabled {
     color: white;
     border: none;
     font-weight: bolder;
-    font-size: 24px;
+    font-size: 3vh;
     border-right: 5px solid;
     border-bottom: 5px solid;
     border-color: var(--dark-shadow);
@@ -239,6 +236,7 @@ input[type="text"]:disabled {
     border-top: 2px solid;
     border-color: var(--accent-three-light);
     cursor: pointer;
+    font-size: 3vh;
 }
 
 .tButtonOn {
@@ -266,6 +264,10 @@ input[type="text"]:disabled {
     border-radius: 20px;
     box-shadow: 5px 5px var(--shadow);
     user-select: none;
+}
+
+.scoreField {
+    font-size: 4vh;
 }
 
 .flexCenter {
