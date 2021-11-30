@@ -181,12 +181,25 @@ input[type="text"]:disabled {
 }
 
 #startTimer {
-    display: absolute;
+    position: absolute;
     z-index: 2;
     background-color: white;
     font-size: 30vh;
     font-weight: bolder;
     color: var(--background);
+}
+
+#endCard {
+    position: absolute;
+    z-index: 3;
+    background-color: white;
+    font-size: 5vh;
+    font-weight: bolder;
+    color: var(--background);
+}
+
+#winnerName {
+    font-size: 7vh;
 }
 
 #gameBoard {

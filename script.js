@@ -276,6 +276,7 @@ const gameLogic = (() => {
             DOMManipulator.updateTurn;
             timer.stopTimer();
             gameRunning = false;
+            DOMManipulator.displayWinner(endArray[1].requestHandler(3)[1]);
         }
     };
 
@@ -487,6 +488,12 @@ const DOMManipulator = (() => {
         timerDiv.classList.toggle("hidden");
     };
 
+    const displayWinner = function (name) {
+        const winnerName = document.getElementById("winnerName");
+        winnerName.innerText = name;
+        document.getElementById("endCard").classList.remove("hidden");
+    };
+
     const resetDOM = function () {
         document.getElementById("playerOneScore").innerText = "0";
         document.getElementById("playerTwoScore").innerText = "0";
@@ -504,6 +511,7 @@ const DOMManipulator = (() => {
         document.getElementById("timerDisplay").classList.add("hidden");
         document.getElementById("topCenter").classList.remove("shrink");
         document.getElementById("messageBox").classList.remove("round");
+        document.getElementById("endCard").classList.add("hidden");
     };
 
     const startDOM = function () {
@@ -559,7 +567,8 @@ const DOMManipulator = (() => {
         updateTimer,
         updateTurn,
         updateStartTimer,
-        toggleStartTimer
+        toggleStartTimer,
+        displayWinner
     };
 
 })();
