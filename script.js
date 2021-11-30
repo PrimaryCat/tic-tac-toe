@@ -274,8 +274,6 @@ const gameLogic = (() => {
         //Set the current player to Player 1.
         currentPlayer = 1;
         DOMManipulator.updateTurn(currentPlayer);
-        //Start the game.
-        gameRunning = true;
         //Update the DOM.
         DOMManipulator.startDOM();
         //start the turn timer.
@@ -283,11 +281,14 @@ const gameLogic = (() => {
     };
 
     const startTimer = function () {
-        window.clearInterval(startTimerVar);
-        DOMManipulator.toggleStartTimer();
-        startTimerTimeout = 3;
-        DOMManipulator.updateStartTimer(startTimerTimeout);
-        startTimerVar = window.setInterval(_countDown,1000);
+        if(gameRunning === false){
+            gameRunning = true;
+            window.clearInterval(startTimerVar);
+            DOMManipulator.toggleStartTimer();
+            startTimerTimeout = 3;
+            DOMManipulator.updateStartTimer(startTimerTimeout);
+            startTimerVar = window.setInterval(_countDown,1000);
+        };
     };
 
     const claimTile = function (tile) {
@@ -344,12 +345,17 @@ const gameLogic = (() => {
             };
     };
 
+    const gameState = function () {
+        return gameRunning;
+    };
+
     return{
         claimTile,
         startTimer,
         resetGame,
         changeMode,
-        changeTurn
+        changeTurn,
+        gameState
     };
 
 })();
@@ -370,8 +376,10 @@ const timer = (() => {
     };
 
     const setTime = function (time) {
-        timeSet = time;
-        DOMManipulator.setTimer(time);
+        if(gameLogic.gameState() === false){
+            timeSet = time;
+            DOMManipulator.setTimer(time);
+        };
     };
 
     const startTimer = function () {
