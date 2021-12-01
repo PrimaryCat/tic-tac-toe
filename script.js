@@ -394,7 +394,17 @@ const domLogic = (() => {
     };
 
     const claimTile = function (value,tile){
-        
+        const tileElem = document.getElementById(`${tile}`);
+        let className;
+        switch(value){
+            case 1:
+                className = "playerOneSelect";
+                break;
+            case 2:
+                className = "playerTwoSelect";
+                break;
+        };
+        tileElem.classList.add(className);
     };
 
     const getNames = function (){
