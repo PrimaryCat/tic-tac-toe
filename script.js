@@ -145,7 +145,11 @@ const gameLogic = (() => {
 
     //Turn order functions and variables.
     
-    const takeTurn = function (tile){
+    const takeTurn = function (humanOrAI,tile){
+        if(currentPlayer.value === 2 && humanOrAI !== gameMode){
+            return;
+        };
+
         let tileClaimed = boardLogic.claimTile(currentPlayer,tile);
 
         if (tileClaimed === true){
@@ -470,7 +474,7 @@ const initializer = (() => {
     const _addTileFunctions = function () {
         const tiles = document.querySelectorAll(".tile")
         tiles.forEach(element => {
-            element.onclick = () => gameLogic.takeTurn(parseInt(element.id));
+            element.onclick = () => gameLogic.takeTurn("human",parseInt(element.id));
         });
     };
 
