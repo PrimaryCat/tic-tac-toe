@@ -11,52 +11,6 @@ const player = function (name, value, raw, opponent){
     };
 };
 
-const player = function(name) {
-    let score = 0;
-
-    //An array of all possible 3-tile long lines where a match can occur.
-    const responseMessages = [
-        "SCORE GOT",
-        "SCORE INCREASED",
-        "SCORE RESET",
-        "UNKNOWN COMMAND",
-        "NAME GOT"
-    ];
-
-    //Function to handle requests made to the player and report back. Takes input in the form
-    //of an integer. Command indexes are 0 for to get current score, 1 to increase score by 1, 2 to reset
-    //score to 0 and 3 to get player name. Returns a response code structured [responseArgs,...].
-    const requestHandler = function (command) {
-        let response;
-
-        switch(command){
-            case 0:
-                response = [0,score];
-                break;
-            case 1:
-                response = [1];
-                score++;
-                break;
-            case 2:
-                response = [2];
-                break;
-            case 3:
-                response = [4,name];
-                break;
-            default:
-                response = [3];
-                break;
-        };
-
-        return response;
-    };
-
-    return {
-        requestHandler,
-        responseMessages
-    };
-};
-
 const gameBoard = (() => {
         //The gameboard consists of three arrays representing rows, each "row" consisting of three empty
         //strings which represent individual tiles on a given "column". 0 represents an empty
