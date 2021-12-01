@@ -1,3 +1,6 @@
+let players = [];
+let currentPlayer;
+
 const player = function (name, value, raw, opponent){
 
     let score = 0;
@@ -31,7 +34,7 @@ const boardLogic = (() => {
         };
         if(legalSpace.includes(gameBoard[tileIndex])){
             gameBoard[tileIndex] = player.value;
-            domLogic.claimTile(player.value,tile);
+            domLogic.claimTile(player.value,tileIndex);
             return true;
         };
         return false;
@@ -82,11 +85,6 @@ const boardLogic = (() => {
 })();
 
 const gameLogic = (() => {
-
-    //Player functions and variables.
-    let players = [];
-    let currentPlayer;
-
     const createPlayers = function (){
         const playerNames = domLogic.getNames();
         const playerOne = player(playerNames[0],1,1,1);
@@ -303,10 +301,10 @@ const domLogic = (() => {
     const updateScore = function (playerValue){
         switch(playerValue){
             case 1:
-                scoreOne.innerText = gameLogic.players[0].score;
+                scoreOne.innerText = players[0].score;
                 break;
             case 2:
-                scoreTwo.innerText = gameLogic.players[1].score;
+                scoreTwo.innerText = players[1].score;
                 break;
             default:
                 scoreOne.innerText = 0;
@@ -427,6 +425,9 @@ const domLogic = (() => {
             case 2:
                 className = "playerTwoSelect";
                 break;
+            default:
+                tileElem.classList = ["tile"];
+                return;
         };
         tileElem.classList.add(className);
     };
