@@ -37,7 +37,7 @@ const boardLogic = (() => {
         return false;
     };
 
-    const resetLine = function (refIndex){
+    const _resetLine = function (refIndex){
         const reference = lineRef[refIndex];
         reference.forEach(tile => {
             gameBoard[tile] = 0;
@@ -52,7 +52,7 @@ const boardLogic = (() => {
         };
     };
     
-    const checkMatch = function (line){
+    const _checkMatch = function (line){
         if(line[0] !== 0){
             return line.every((tile) => {
                 tile === line[0];
@@ -64,14 +64,20 @@ const boardLogic = (() => {
     const checkBoard = function (){
         for(let reference of lineRef){
             const line = [reference[0],reference[1],reference[2]];
-            const match = checkMatch(line);
+            const match = _checkMatch(line);
             if(match === true){
-                resetLine(lineRef.indexOf(reference));
+                _resetLine(lineRef.indexOf(reference));
                 return true;
             };
         };
         return false;
     };
+
+    return{
+        reset,
+        claimTile,
+        checkBoard
+    }
 
 })();
 
@@ -102,7 +108,7 @@ const gameLogic = (() => {
     //Game flow functions and variables.
     let gameRunning = false;
 
-    const start = function (){
+    const _start = function (){
         players = [];
         createPlayers();
         currentPlayer = players[0];
@@ -120,7 +126,7 @@ const gameLogic = (() => {
         domLogic.reset();
     };
 
-    const end = function (){
+    const _end = function (){
         const endCondition = {gameWon: false, winner: null};
 
         players.forEach(player => {
@@ -145,14 +151,14 @@ const gameLogic = (() => {
         let tileClaimed = boardLogic.claimTile(currentPlayer,tile);
 
         if (tileClaimed === true){
-            let matchMade = boardLogic.checkMatch();
+            let matchMade = boardLogic.checkBoard();
             if (matchMade === true){
                 currentPlayer.score = currentPlayer.score++;
                 domLogic.updateScore(currentPlayer.value);
             };
 
             changeTurn();
-            end();
+            _end();
         };
     };
 
@@ -171,7 +177,7 @@ const gameLogic = (() => {
         if (startTimer === 0){
             window.clearInterval(startTimerVar);
             domLogic.toggleStartTimer();
-            start();
+            _start();
         };
         domLogic.updateStartTimer(startTimer);
     };
@@ -186,6 +192,16 @@ const gameLogic = (() => {
             startTimerVar = window.setInterval(_countDown,1000)
         };
     };
+
+    return{
+        changeTurn,
+        takeTurn,
+        changeMode,
+        createStartTimer,
+        reset,
+        gameRunning,
+        players
+    }
 
 })();
 
@@ -213,11 +229,11 @@ const turnTimer = (() => {
 
     const start = function (){
         resetTurn();
-        timerVar = window.setInterval(_countDown,1000);
+        timeVar = window.setInterval(_countDown,1000);
     };
 
     const stop = function (){
-        window.clearInterval(timerVar);
+        window.clearInterval(timeVar);
     };
 
     const resetTurn = function (){
@@ -230,6 +246,14 @@ const turnTimer = (() => {
         set(3);
         resetTurn();
     };
+
+    return{
+        start,
+        reset,
+        stop,
+        resetTurn,
+        set,
+    }
 
 })();
 
@@ -273,16 +297,16 @@ const domLogic = (() => {
             default:
                 centerCard.style.borderColor = "white";
                 break;
-        }
+        };
     };
 
     const updateScore = function (playerValue){
         switch(playerValue){
             case 1:
-                scoreOne.innerText = players[0].score;
+                scoreOne.innerText = gameLogic.players[0].score;
                 break;
             case 2:
-                scoreTwo.innerText = players[1].score;
+                scoreTwo.innerText = gameLogic.players[1].score;
                 break;
             default:
                 scoreOne.innerText = 0;
@@ -411,6 +435,21 @@ const domLogic = (() => {
         return [nameOne.value, nameTwo.value]
     };
 
+    return{
+        displayTurn,
+        updateScore,
+        updateTurnTimer,
+        setTurnTimer,
+        updateStartTimer,
+        toggleStartTimer,
+        displayWinner,
+        changeMode,
+        reset,
+        start,
+        claimTile,
+        getNames
+    }
+
 })();
 
 const initializer = (() => {
@@ -432,7 +471,6 @@ const initializer = (() => {
     };
 
     const start = function () {
-        players = [];
         document.getElementById("playerOneName").value = "Player 1";
         document.getElementById("playerTwoName").value = "Player 2";
         _addTileFunctions();
