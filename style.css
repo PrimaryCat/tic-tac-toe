@@ -346,6 +346,11 @@ input[type="text"]:disabled {
     animation-fill-mode: forwards;
 }
 
+.shake {
+    animation: shake 0.3s;
+    animation-timing-function: linear;
+}
+
 /* ANIMATION */
 
 @keyframes shrink {
@@ -356,4 +361,11 @@ input[type="text"]:disabled {
 @keyframes round {
     0% {width: 99%;border-radius: 20px;}
     100% {width: 87%;border-radius: 50%;}
+}
+
+@keyframes shake {
+    0%   {margin-right: 2%; margin-bottom: 2%;}
+    33%  {margin-right: 2%; margin-top: 2%;}
+    66%  {margin-left: 2%;  margin-bottom: 2%;}
+    100% {margin-left: 2%;  margin-top: 2%;}
 }

@@ -351,8 +351,10 @@ const domLogic = (() => {
     //Get necessary DOM elements.
     const centerCard = document.getElementById("centerCard");
     //Player elements.
+    const playerOne = document.getElementById("playerOne");
     const scoreOne = document.getElementById("playerOneScore");
     const nameOne = document.getElementById("playerOneName");
+    const playerTwo = document.getElementById("playerTwo");
     const scoreTwo = document.getElementById("playerTwoScore");
     const nameTwo = document.getElementById("playerTwoName");
     //Turn timer elements.
@@ -393,8 +395,10 @@ const domLogic = (() => {
         switch(playerValue){
             case 1:
                 scoreOne.innerText = gameLogic.getInformation(1)[0].score;
+                _shake(playerTwo);
                 break;
             case 2:
+                _shake(playerOne);
                 scoreTwo.innerText = gameLogic.getInformation(1)[1].score;
                 break;
             default:
@@ -527,6 +531,12 @@ const domLogic = (() => {
         return [nameOne.value, nameTwo.value]
     };
 
+    async function _shake (element) {
+        element.classList.toggle("shake");
+        await new Promise(resolve => setTimeout(resolve, 300));
+        element.classList.toggle("shake");
+    };
+
     return{
         displayTurn,
         updateScore,
@@ -573,5 +583,7 @@ const initializer = (() => {
         start
     };
 })();
+
+
 
 initializer.start()
