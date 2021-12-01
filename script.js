@@ -61,14 +61,12 @@ const boardLogic = (() => {
         return false;
     };
 
-    const checkBoard = function (board,aiCheck){
+    const checkBoard = function (){
         for(let reference of lineRef){
-            const line = [board[reference[0]], board[reference[1]], board[reference[2]]];
+            const line = [gameBoard[reference[0]], gameBoard[reference[1]], gameBoard[reference[2]]];
             const match = _checkMatch(line);
             if(match === true){
-                if(aiCheck === false){
-                    _resetLine(lineRef.indexOf(reference));    
-                };
+                _resetLine(lineRef.indexOf(reference));    
                 return true;
             };
         };
@@ -160,7 +158,7 @@ const gameLogic = (() => {
         let tileClaimed = boardLogic.claimTile(currentPlayer,tile);
 
         if (tileClaimed === true){
-            let matchMade = boardLogic.checkBoard(boardLogic.getBoard(),false);
+            let matchMade = boardLogic.checkBoard();
             if (matchMade === true){
                 currentPlayer.score++;
                 domLogic.updateScore(currentPlayer.value);
@@ -231,13 +229,36 @@ const gameLogic = (() => {
 
 const aiPlayer = (() => {
 
+    const lineRef = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    
     let move;
 
-    const _miniMax = function (board, player){
+    const _checkMatch = function (line){
+        if(line[0] !== 0){
+            let matchFound = line.every((tile) => {
+                return tile === line[0];
+            });
+            return [matchFound, line[0]];
+        };
+        return [false];
+    };
 
-        if(boardLogic.checkBoard(board,true) === true){
-            return gameLogic.getInformation(1)[player.opponent].raw;
-        }
+    const _checkBoard = function (board){
+        for(let reference of lineRef){
+            const line = [board[reference[0]], board[reference[1]], board[reference[2]]];
+            const match = _checkMatch(line);
+            if(match[0] === true){
+                return match;
+            };
+        };
+        return [false];        
+    };
+
+    const _miniMax = function (board, player){
+        const match = _checkBoard(board);
+        if(match[0] === true){
+            return gameLogic.getInformation(1)[match[1]-1].raw * player.raw;
+        };
 
         move = -1;
         score = -2;
