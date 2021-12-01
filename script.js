@@ -31,7 +31,7 @@ const boardLogic = (() => {
         };
         if(legalSpace.includes(gameBoard[tileIndex])){
             gameBoard[tileIndex] = player.value;
-            displayLogic.claimTile(player.value,tile);
+            domLogic.claimTile(player.value,tile);
             return true;
         };
         return false;
@@ -41,14 +41,14 @@ const boardLogic = (() => {
         const reference = lineRef[refIndex];
         reference.forEach(tile => {
             gameBoard[tile] = 0;
-            displayLogic.claimTile(0,tile);
+            domLogic.claimTile(0,tile);
         });
     };
 
-    const resetBoard = function (){
+    const reset = function (){
         for(let tile = 0; tile < 9; tile++){
             gameBoard[tile] = 0;
-            displayLogic.claimTile(0,tile);
+            domLogic.claimTile(0,tile);
         };
     };
     
@@ -75,216 +75,112 @@ const boardLogic = (() => {
 
 })();
 
-const gameBoard = (() => {
-
-        //Checks the whole board for matches, returns true if a match is present on the board,
-        //otherwise returns false.
-        const _checkBoard = function () {
-            let response = [];
-            let matchFound;
-            let lineIndex = null;
-
-            for(let ref of lineRef){
-                let line = [];
-                
-                line.push(tiles[ref[0][0]][ref[0][1]]);
-                line.push(tiles[ref[1][0]][ref[1][1]]);
-                line.push(tiles[ref[2][0]][ref[2][1]]);
-
-                matchFound = _checkTiles(line);
-
-                if(matchFound === true){
-                    lineIndex = lineRef.indexOf(ref);
-                    response.push(5);
-                    let message = _resetLine(lineIndex);
-                    response.push(message);
-                    break;
-                }
-                else {
-                    response.push(4);
-                };
-            };
-        
-            return response;
-        };
-
-        //Function to handle requests made to the gameboard and report back. Takes input in the form
-        //of an array structured [commandIndex,command]. Command indexes are 0 for a board reset, 1 for
-        //player input and 2 to get board status. For player input, the command is an array structured as
-        //[playerValue,[row,column]]. Returns a response code structured [responseArgs,...].
-        const requestHandler = function (request) {
-            let response;
-            switch(request[0]){
-                case 0:
-                    response = _resetBoard();
-                    break;
-                case 1:
-                    response = _setTile(request[1][0],request[1][1]);
-                    break;
-                case 2:
-                    response = [8,tiles];
-                    break;
-                default:
-                    response = [6];
-                    break;
-            };
-            return response;
-        };
-
-        return{
-          requestHandler,
-          responseMessages,
-        };
-})();
-
 const gameLogic = (() => {
-    //Gamemode for vs player and vs ai. 0 denotes vs player, 1 denotes vs ai.
-    let gameMode = 0;
+
+    //Player functions and variables.
+    let players = [];
+    let currentPlayer;
+
+    const createPlayers = function (){
+        const playerNames = domLogic.getNames();
+        const playerOne = player(playerNames[0],1,1,1);
+        players.push(playerOne);
+        const playerTwo = player(playerNames[1],2,-1,0);
+        players.push(playerTwo);
+    };
+
+    //Game mode functions and variables.
+    let gameMode = "human";
+
+    const changeMode = function (mode){
+        if(gameRunning !== true){
+            gameMode = mode;
+            domLogic.changeMode(mode);
+        };
+    };
+    
+    //Game flow functions and variables.
     let gameRunning = false;
 
-    let startTimerVar;
-    let startTimerTimeout;
-
-    const _countDown = function () {
-        startTimerTimeout--;
-        if(startTimerTimeout === 0){
-            _stopTimer();
-            DOMManipulator.toggleStartTimer();
-            _startGame();
-        };
-        DOMManipulator.updateStartTimer(startTimerTimeout);
-    };
-
-    const _checkWin = function () {
-        let gameEnd = false;
-        if(players[0].requestHandler(0)[1] === 5){
-            gameEnd = true;
-            return [gameEnd,players[0]];
-        }
-        else if(players[1].requestHandler(0)[1] === 5){
-            gameEnd = true;
-            return [gameEnd,players[1]];
-        }
-        else {
-            return [gameEnd];
-        };
-    }
-
-    const _endGame = function (endArray) {
-        if(endArray[0] === true){
-            currentPlayer = 0;
-            DOMManipulator.updateTurn;
-            timer.stopTimer();
-            gameRunning = false;
-            DOMManipulator.displayWinner(endArray[1]);
-        }
-    };
-
-    const _stopTimer = function () {
-        window.clearInterval(startTimerVar)
-    };
-
-    const _createPlayers = function () {
-        let playerOne = player(document.getElementById("playerOneName").value);
-        players.push(playerOne);
-        let playerTwo = player(document.getElementById("playerTwoName").value);
-        players.push(playerTwo);
-    }
-
-    const _startGame = function () {
-        //Clear player list.
+    const start = function (){
         players = [];
-        //Create new players.
-        _createPlayers();
-        //Set the current player to Player 1.
-        currentPlayer = 1;
-        DOMManipulator.updateTurn(currentPlayer);
-        //Update the DOM.
-        DOMManipulator.startDOM();
-        //start the turn timer.
-        timer.startTimer();
+        createPlayers();
+        currentPlayer = players[0];
+        domLogic.displayTurn(currentPlayer.value);
+        domLogic.start();
+        turnTimer.start();
     };
 
-    const startTimer = function () {
-        if(gameRunning === false){
+    const reset = function (){
+        gameRunning = false;
+        currentPlayer = null;
+        gameMode = "human";
+        boardLogic.reset();
+        turnTimer.reset();
+        domLogic.reset();
+    };
+
+    const end = function (){
+        const endCondition = {gameWon: false, winner: null};
+
+        players.forEach(player => {
+            if(player.score === 5){
+                endCondition.gameWon = true;
+                endCondition.winner = player;
+            };
+        });
+
+        if(endCondition.gameWon === true){
+            currentPlayer = null;
+            gameRunning = false;
+            domLogic.displayTurn(0);
+            turnTimer.stop();
+            domLogic.displayWinner(endCondition.winner.value);
+        };
+    };
+
+    //Turn order functions and variables.
+    
+    const takeTurn = function (tile){
+        let tileClaimed = boardLogic.claimTile(currentPlayer,tile);
+
+        if (tileClaimed === true){
+            let matchMade = boardLogic.checkMatch();
+            if (matchMade === true){
+                currentPlayer.score = currentPlayer.score++;
+                domLogic.updateScore(currentPlayer.value);
+            };
+
+            currentPlayer = players[currentPlayer.opponent];
+            domLogic.displayTurn(currentPlayer.value);
+            turnTimer.resetTurn();
+            end();
+        };
+    };
+    
+    //Timer functions and variables.
+    let startTimerVar;
+    let startTimer;
+
+    const _countDown = function (){
+        startTimer--;
+        if (startTimer === 0){
+            window.clearInterval(startTimerVar);
+            domLogic.toggleStartTimer();
+            start();
+        };
+        domLogic.updateStartTimer(startTimer);
+    };
+
+    const createStartTimer = function (){
+        if (gameRunning === false){
             gameRunning = true;
             window.clearInterval(startTimerVar);
-            DOMManipulator.toggleStartTimer();
-            startTimerTimeout = 3;
-            DOMManipulator.updateStartTimer(startTimerTimeout);
-            startTimerVar = window.setInterval(_countDown,1000);
+            domLogic.toggleStartTimer();
+            startTimer = 3;
+            domLogic.updateStartTimer();
+            startTimerVar = window.setInterval(_countDown,1000)
         };
-    };
-
-    const claimTile = function (tile) {
-        let response = gameBoard.requestHandler([1,[currentPlayer,tile]]);
-
-        if(response.length > 1 && response[1].slice(-1)[0] === 2){
-            playerResponse = players[currentPlayer-1].requestHandler(1);
-            DOMManipulator.updateScores();
-        };
-
-        if(response[0] === 0){
-            changeTurn();
-            timer.resetTimer();
-        };
-
-        _endGame(_checkWin());
-    };
-
-    const changeTurn = function () {
-        if(currentPlayer === 1){
-            currentPlayer = 2;
-        }
-        else if(currentPlayer === 2){
-            currentPlayer = 1;
-        };
-        DOMManipulator.updateTurn(currentPlayer);
-    };
-
-    const resetGame = function () {
-        //Clear current player.
-        currentPlayer = 0;
-        DOMManipulator.updateTurn(currentPlayer);
-        //Set game mode to vs. Player.
-        gameMode = 0;
-        //Reset board.
-        gameBoard.requestHandler([0]);
-        //Reset player scores.
-        players.forEach(player => {
-            player.requestHandler(2)
-        });
-        //Stop the game.
-        gameRunning = false;
-        //Stop the timer.
-        timer.stopTimer();
-        //Reset the timer.
-        timer.resetTimer();
-        //Reset the timer.
-        timer.setTime(3);
-        //Reset the DOM.
-        DOMManipulator.resetDOM();
-    };
-
-    const changeMode = function (mode) {
-        if(gameRunning === false){
-                DOMManipulator.changeDOMMode(mode);
-                gameMode = mode;
-                console.log(gameMode)
-            };
-    };
-
-    const gameState = function () {
-        return gameRunning;
-    };
-
-    return{
-        claimTile,
-        startTimer,
-        resetGame,
-        changeMode,
-        changeTurn,
-        gameState
     };
 
 })();
