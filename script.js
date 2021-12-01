@@ -1,6 +1,3 @@
-let players = [];
-let currentPlayer;
-
 const player = function (name, value, raw, opponent){
 
     let score = 0;
@@ -58,7 +55,7 @@ const boardLogic = (() => {
     const _checkMatch = function (line){
         if(line[0] !== 0){
             return line.every((tile) => {
-                tile === line[0];
+                return tile === line[0];
             });
         };
         return false;
@@ -66,10 +63,13 @@ const boardLogic = (() => {
 
     const checkBoard = function (){
         for(let reference of lineRef){
-            const line = [reference[0],reference[1],reference[2]];
+            const line = [gameBoard[reference[0]], gameBoard[reference[1]], gameBoard[reference[2]]];
+            console.log(line);  
             const match = _checkMatch(line);
+            console.log(match);
             if(match === true){
                 _resetLine(lineRef.indexOf(reference));
+                console.log("YAY")
                 return true;
             };
         };
@@ -85,6 +85,9 @@ const boardLogic = (() => {
 })();
 
 const gameLogic = (() => {
+    let players = [];
+    let currentPlayer;
+
     const createPlayers = function (){
         const playerNames = domLogic.getNames();
         const playerOne = player(playerNames[0],1,1,1);
@@ -191,14 +194,26 @@ const gameLogic = (() => {
         };
     };
 
+    const getInformation = function (infoIndex){
+        switch(infoIndex){
+            case 0:
+                return gameRunning;
+            case 1:
+                return players;
+            case 2:
+                return currentPlayer;
+            default:
+                return null;
+        }
+    }
+
     return{
         changeTurn,
         takeTurn,
         changeMode,
         createStartTimer,
         reset,
-        gameRunning,
-        players
+        getInformation
     }
 
 })();
@@ -219,7 +234,7 @@ const turnTimer = (() => {
     };
 
     const set = function (time) {
-        if (gameLogic.gameRunning === false){
+        if (gameLogic.getInformation(0) === false){
             timeSet = time;
             domLogic.setTurnTimer(time);
         };
@@ -301,10 +316,10 @@ const domLogic = (() => {
     const updateScore = function (playerValue){
         switch(playerValue){
             case 1:
-                scoreOne.innerText = players[0].score;
+                scoreOne.innerText = gameLogic.getInformation(1)[0].score;
                 break;
             case 2:
-                scoreTwo.innerText = players[1].score;
+                scoreTwo.innerText = gameLogic.getInformation(1)[1].score;
                 break;
             default:
                 scoreOne.innerText = 0;
