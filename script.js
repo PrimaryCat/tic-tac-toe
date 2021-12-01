@@ -131,11 +131,11 @@ const gameLogic = (() => {
         });
 
         if(endCondition.gameWon === true){
-            currentPlayer = null;
             gameRunning = false;
             domLogic.displayTurn(0);
             turnTimer.stop();
-            domLogic.displayWinner(endCondition.winner.value);
+            domLogic.displayWinner(endCondition.winner);
+            currentPlayer = null;
         };
     };
 
@@ -233,37 +233,66 @@ const turnTimer = (() => {
 
 })();
 
-const DOMManipulator = (() => {
+const domLogic = (() => {
 
-    const updateTurn = function (player) {
-        const indicator = document.getElementById("centerCard")
-        switch(player){
+    //Get necessary DOM elements.
+    const centerCard = document.getElementById("centerCard");
+    //Player elements.
+    const scoreOne = document.getElementById("playerOneScore");
+    const nameOne = document.getElementById("playerOneName");
+    const scoreTwo = document.getElementById("playerTwoScore");
+    const nameTwo = document.getElementById("playerTwoName");
+    //Turn timer elements.
+    const turnTimerText = document.getElementById("timerDisplayText");
+    const topCenter = document.getElementById("topCenter");
+    const messageBox = document.getElementById("messageBox");
+    const turnTimerSetter = document.getElementById("timerSetter");
+    const turnTimerDisplay = document.getElementById("timerDisplay");
+    //Start timer elements.
+    const startTimerText = document.getElementById("startTimerText");
+    const startTimerDiv = document.getElementById("startTimer")
+    //End card elements.
+    const endCard = document.getElementById("endCard");
+    const winnerName = document.getElementById("winnerName");
+    //Buttons.
+    const resetButton = document.getElementById("reset");
+    const startButton = document.getElementById("start");
+    const humanButton = document.getElementById("vsPlayer");
+    const aiButton = document.getElementById("vsAI");
+    const tsButton = document.getElementById("threeSecondButton");
+    const fsButton = document.getElementById("fiveSecondButton");
+
+    const displayTurn = function (playerValue){
+        switch(playerValue){
             case 1:
-                indicator.style.borderColor = "var(--accent-two)";
+                centerCard.style.borderColor = "var(--accent-two)";
                 break;
             case 2:
-                indicator.style.borderColor = "var(--accent-three)";
+                centerCard.style.borderColor = "var(--accent-three)";
                 break;
             default:
-                indicator.style.borderColor = "white";
+                centerCard.style.borderColor = "white";
                 break;
         }
-    }
-
-    const updateScores = function () {
-        const scoreOne = document.getElementById("playerOneScore");
-        const scoreTwo = document.getElementById("playerTwoScore");
-        scoreOne.innerText = players[0].requestHandler(0)[1];
-        scoreTwo.innerText = players[1].requestHandler(0)[1];
     };
 
-    const updateTimer = function (time) {
-        const timerText = document.getElementById("timerDisplayText");
-        const topCenter = document.getElementById("topCenter");
-        const messageBox = document.getElementById("messageBox");
+    const updateScore = function (playerValue){
+        switch(playerValue){
+            case 1:
+                scoreOne.innerText = players[0].score;
+                break;
+            case 2:
+                scoreTwo.innerText = players[1].score;
+                break;
+            default:
+                scoreOne.innerText = 0;
+                scoreTwo.innerText = 0;
+                break;
+        };
+    };
 
-        timerText.innerText = time;
-
+    const updateTurnTimer = function (time){
+        turnTimerText.innerText = time;
         switch(time){
             case 2:
                 topCenter.style.backgroundColor = "var(--accent-one-dark)";
@@ -280,106 +309,96 @@ const DOMManipulator = (() => {
         };
     };
 
+    const setTurnTimer = function (timer) {
+        switch(timer){
+            case 3:
+                tsButton.classList.add("tButtonOn")
+                fsButton.classList.remove("tButtonOn")
+                break;
+            case 5:
+                fsButton.classList.add("tButtonOn")
+                tsButton.classList.remove("tButtonOn")
+                break;
+        };
+    };
+
     const updateStartTimer = function (time) {
-        const timerText = document.getElementById("startTimerText");
-        timerText.innerText = time;
+        startTimerText.innerText = time;
     };
 
     const toggleStartTimer = function () {
-        const timerDiv = document.getElementById("startTimer");
-        timerDiv.classList.toggle("hidden");
+        startTimerDiv.classList.toggle("hidden");
     };
 
     const displayWinner = function (player) {
-        const winnerName = document.getElementById("winnerName");
-        winnerName.innerText = player.requestHandler(3)[1];
-        document.getElementById("endCard").classList.remove("hidden");
-        const playerIndex = players.indexOf(player);
-        switch(playerIndex){
-            case 0:
+        winnerName.innerText = player.name;
+        endCard.classList.remove("hidden");
+        switch(player.value){
+            case 1:
                 winnerName.style.color = "var(--accent-two-dark)";
                 break;
-            case 1:
+            case 2:
                 winnerName.style.color = "var(--accent-three-dark)";
                 break;
         };
     };
 
-    const resetDOM = function () {
-        document.getElementById("playerOneScore").innerText = "0";
-        document.getElementById("playerTwoScore").innerText = "0";
-        document.getElementById("reset").classList.add("hidden");
-        document.getElementById("start").classList.remove("hidden");
-        document.getElementById("vsPlayer").classList.remove("hidden");
-        document.getElementById("vsAI").classList.add("hidden");
-        document.getElementById("playerOneName").disabled = false;
-        document.getElementById("playerTwoName").disabled = false;
-        document.getElementById("playerOneName").style.color = "var(--foreground)";
-        document.getElementById("playerTwoName").style.color = "var(--foreground)";
-        document.getElementById("threeSecondButton").classList.add("tButtonOn")
-        document.getElementById("fiveSecondButton").classList.remove("tButtonOn")
-        document.getElementById("timerSetter").classList.remove("hidden");
-        document.getElementById("timerDisplay").classList.add("hidden");
-        document.getElementById("topCenter").classList.remove("shrink");
-        document.getElementById("messageBox").classList.remove("round");
-        document.getElementById("endCard").classList.add("hidden");
-    };
-
-    const startDOM = function () {
-        document.getElementById("reset").classList.remove("hidden");
-        document.getElementById("start").classList.add("hidden");
-        document.getElementById("playerOneName").disabled = true;
-        document.getElementById("playerTwoName").disabled = true;
-        document.getElementById("playerOneName").style.color = "var(--foreground-light)";
-        document.getElementById("playerTwoName").style.color = "var(--foreground-light)";
-        document.getElementById("timerSetter").classList.add("hidden");
-        document.getElementById("timerDisplay").classList.remove("hidden");
-        document.getElementById("topCenter").classList.add("shrink");
-        document.getElementById("messageBox").classList.add("round");
-    };
-
-    const setTimer = function (timer) {
-        switch(timer){
-            case 3:
-                document.getElementById("threeSecondButton").classList.add("tButtonOn")
-                document.getElementById("fiveSecondButton").classList.remove("tButtonOn")
-                break;
-            case 5:
-                document.getElementById("fiveSecondButton").classList.add("tButtonOn")
-                document.getElementById("threeSecondButton").classList.remove("tButtonOn")
-                break;
-        }
-
-    }
-
-    const changeDOMMode = function (mode) {
+    const changeMode = function (mode) {
         switch(mode){
-            case 1:
-                document.getElementById("vsPlayer").classList.add("hidden");
-                document.getElementById("vsAI").classList.remove("hidden");
-                document.getElementById("playerTwoName").value = "Robobot";
-                document.getElementById("playerTwoName").disabled = true;
+            case "ai":
+                humanButton.classList.add("hidden");
+                aiButton.classList.remove("hidden");
+                nameTwo.value = "Robobot";
+                nameTwo.disabled = true;
                 break;
-            case 0:
-                document.getElementById("vsPlayer").classList.remove("hidden");
-                document.getElementById("vsAI").classList.add("hidden");
-                document.getElementById("playerTwoName").value = "Player 2";
-                document.getElementById("playerTwoName").disabled = false;
+            case "human":
+                humanButton.classList.remove("hidden");
+                aiButton.classList.add("hidden");
+                nameTwo.value = "Player 2";
+                nameTwo.disabled = false;
                 break;
         };
     };
 
-    return {
-        updateScores,
-        resetDOM,
-        startDOM,
-        changeDOMMode,
-        setTimer,
-        updateTimer,
-        updateTurn,
-        updateStartTimer,
-        toggleStartTimer,
-        displayWinner
+    const reset = function () {
+        updateScore(0);
+        resetButton.classList.add("hidden");
+        startButton.classList.remove("hidden");
+        humanButton.classList.remove("hidden");
+        aiButton.classList.add("hidden");
+        nameOne.disabled = false;
+        nameOne.style.color = "var(--foreground)";
+        nameTwo.disabled = false;
+        nameTwo.style.color = "var(--foreground)";
+        tsButton.classList.add("tButtonOn")
+        fsButton.classList.remove("tButtonOn")
+        turnTimerSetter.classList.remove("hidden");
+        turnTimerDisplay.classList.add("hidden");
+        topCenter.classList.remove("shrink");
+        messageBox.classList.remove("round");
+        endCard.classList.add("hidden");
+        displayTurn(0);
+    };
+
+    const start = function () {
+        resetButton.classList.remove("hidden");
+        startButton.classList.add("hidden");
+        nameOne.disabled = true;
+        nameOne.style.color = "var(--foreground-light)";
+        nameTwo.disabled = true;
+        nameTwo.style.color = "var(--foreground-light)";
+        turnTimerSetter.classList.add("hidden");
+        turnTimerDisplay.classList.remove("hidden");
+        topCenter.classList.add("shrink");
+        messageBox.classList.add("round");
+    };
+
+    const claimTile = function (value,tile){
+        
+    };
+
+    const getNames = function (){
+        return [nameOne.value, nameTwo.value]
     };
 
 })();
