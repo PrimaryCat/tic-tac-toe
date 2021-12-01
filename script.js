@@ -151,12 +151,16 @@ const gameLogic = (() => {
                 domLogic.updateScore(currentPlayer.value);
             };
 
-            currentPlayer = players[currentPlayer.opponent];
-            domLogic.displayTurn(currentPlayer.value);
-            turnTimer.resetTurn();
+            changeTurn();
             end();
         };
     };
+
+    const changeTurn = function () {
+        currentPlayer = players[currentPlayer.opponent];
+        domLogic.displayTurn(currentPlayer.value);
+        turnTimer.resetTurn();
+    }
     
     //Timer functions and variables.
     let startTimerVar;
@@ -185,48 +189,48 @@ const gameLogic = (() => {
 
 })();
 
-const timer = (() => {
+const turnTimer = (() => {
     let timeSet = 3;
     let timeLeft = 0;
-    let timerVar;
+    let timeVar;
 
-    const _countDown = function () {
+    const _countDown = function (){
         timeLeft--;
-        DOMManipulator.updateTimer(timeLeft);
-        if(timeLeft === 0){
-            resetTimer();
-            DOMManipulator.updateTimer(timeLeft);
+        domLogic.updateTurnTimer(timeLeft);
+        if (timeLeft === 0){
+            resetTurn();
+            domLogic.updateTurnTimer(timeLeft);
             gameLogic.changeTurn();
-        }
-    };
-
-    const setTime = function (time) {
-        if(gameLogic.gameState() === false){
-            timeSet = time;
-            DOMManipulator.setTimer(time);
         };
     };
 
-    const startTimer = function () {
-        resetTimer();
+    const set = function (time) {
+        if (gameLogic.gameRunning === false){
+            timeSet = time;
+            domLogic.setTurnTimer(time);
+        };
+    };
+
+    const start = function (){
+        resetTurn();
         timerVar = window.setInterval(_countDown,1000);
     };
 
-    const stopTimer = function () {
-        window.clearInterval(timerVar)
+    const stop = function (){
+        window.clearInterval(timerVar);
     };
 
-    const resetTimer = function () {
+    const resetTurn = function (){
         timeLeft = timeSet;
-        DOMManipulator.updateTimer(timeLeft);
+        domLogic.updateTurnTimer(timeLeft);
     };
 
-    return{
-        setTime,
-        resetTimer,
-        startTimer,
-        stopTimer
-    }
+    const reset = function (){
+        stop();
+        set(3);
+        resetTurn();
+    };
+
 })();
 
 const DOMManipulator = (() => {
