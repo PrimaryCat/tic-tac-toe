@@ -61,12 +61,14 @@ const boardLogic = (() => {
         return false;
     };
 
-    const checkBoard = function (board){
+    const checkBoard = function (board,aiCheck){
         for(let reference of lineRef){
             const line = [board[reference[0]], board[reference[1]], board[reference[2]]];
             const match = _checkMatch(line);
             if(match === true){
-                _resetLine(lineRef.indexOf(reference));
+                if(aiCheck === false){
+                    _resetLine(lineRef.indexOf(reference));    
+                };
                 return true;
             };
         };
@@ -74,7 +76,7 @@ const boardLogic = (() => {
     };
 
     const getBoard = function (){
-        return gameBoard;
+        return Array.from(gameBoard);
     };
 
     return{
@@ -158,7 +160,7 @@ const gameLogic = (() => {
         let tileClaimed = boardLogic.claimTile(currentPlayer,tile);
 
         if (tileClaimed === true){
-            let matchMade = boardLogic.checkBoard(boardLogic.getBoard());
+            let matchMade = boardLogic.checkBoard(boardLogic.getBoard(),false);
             if (matchMade === true){
                 currentPlayer.score++;
                 domLogic.updateScore(currentPlayer.value);
@@ -173,6 +175,9 @@ const gameLogic = (() => {
         currentPlayer = players[currentPlayer.opponent];
         domLogic.displayTurn(currentPlayer.value);
         turnTimer.resetTurn();
+        if(gameMode === "ai" && currentPlayer.value === 2){
+            aiPlayer.takeTurn();
+        };
     }
     
     //Timer functions and variables.
@@ -230,7 +235,7 @@ const aiPlayer = (() => {
 
     const _miniMax = function (board, player){
 
-        if(boardLogic.checkBoard(board) === true){
+        if(boardLogic.checkBoard(board,true) === true){
             return gameLogic.getInformation(1)[player.opponent].raw;
         }
 
@@ -239,7 +244,7 @@ const aiPlayer = (() => {
 
         for(let i = 0; i < 9; i++){
             if(board[i] === 0){
-                const newBoard = board;
+                let newBoard = Array.from(board);
                 newBoard[i] = player.value;
                 let moveScore = -_miniMax(newBoard,gameLogic.getInformation(1)[player.opponent]);
                 if (moveScore > score){
@@ -253,12 +258,12 @@ const aiPlayer = (() => {
             return 0;
         };
 
-
         return score;
     };
 
     const takeTurn = function (){
-
+        _miniMax(boardLogic.getBoard(),gameLogic.getInformation(1)[1]);
+        gameLogic.takeTurn("ai",move);
     };
 
     return{
