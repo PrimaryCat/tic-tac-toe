@@ -11,135 +11,71 @@ const player = function (name, value, raw, opponent){
     };
 };
 
-const gameBoard = (() => {
-        //The gameboard consists of three arrays representing rows, each "row" consisting of three empty
-        //strings which represent individual tiles on a given "column". 0 represents an empty
-        //tile, a tile claimed by Player 1 is indicated by 1 and one claimed by Player 2 is indicated by 2.
-        let tiles = [[0,0,0],[0,0,0],[0,0,0]];
+const boardLogic = (() => {
+    const gameBoard = [0,0,0,0,0,0,0,0,0];
 
-        //An array of all the row and column data for each legal 3-tile long lines where a match can occur.
-        //Not the cleanest solution, but works for a small number of lines such as this one.
-        const lineRef = [
-              [[0,0],[0,1],[0,2]],
-              [[1,0],[1,1],[1,2]],
-              [[2,0],[2,1],[2,2]],
-              [[0,0],[1,0],[2,0]],
-              [[0,1],[1,1],[2,1]],
-              [[0,2],[1,2],[2,2]],
-              [[0,0],[1,1],[2,2]],
-              [[0,2],[1,1],[2,0]],
-        ];
+    const lineRef = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
-        //An array of all possible response messages.
-        const responseMessages = [
-            "TILE SET",
-            "TILE NOT EMPTY",
-            "LINE RESET",
-            "BOARD RESET",
-            "MATCH NOT FOUND",
-            "MATCH FOUND",
-            "UNKNOWN COMMAND",
-            "STATUS GOT"
-        ];
+    const _checkFull = function (array) {
+        if(array.includes(0)){
+            return false;
+        };
+        return true;
+    };
 
-        const _checkTie = function (array) {
-            const arrayReducer = (prevArray, nextArray) => prevArray.concat(nextArray);
-            let reducedArray = array.reduce(arrayReducer);
-            if(reducedArray.includes(0)){
-                return false;
-            }
-            else{
+    const claimTile = function (player,tileIndex){
+        const boardFull = _checkFull(gameBoard);
+        const legalSpace = [0];
+        if(boardFull){
+            legalSpace.push(player.opponent.value);
+        };
+        if(legalSpace.includes(gameBoard[tileIndex])){
+            gameBoard[tileIndex] = player.value;
+            displayLogic.claimTile(player.value,tile);
+            return true;
+        };
+        return false;
+    };
+
+    const resetLine = function (refIndex){
+        const reference = lineRef[refIndex];
+        reference.forEach(tile => {
+            gameBoard[tile] = 0;
+            displayLogic.claimTile(0,tile);
+        });
+    };
+
+    const resetBoard = function (){
+        for(let tile = 0; tile < 9; tile++){
+            gameBoard[tile] = 0;
+            displayLogic.claimTile(0,tile);
+        };
+    };
+    
+    const checkMatch = function (line){
+        if(line[0] !== 0){
+            return line.every((tile) => {
+                tile === line[0];
+            });
+        };
+        return false;
+    };
+
+    const checkBoard = function (){
+        for(let reference of lineRef){
+            const line = [reference[0],reference[1],reference[2]];
+            const match = checkMatch(line);
+            if(match === true){
+                resetLine(lineRef.indexOf(reference));
                 return true;
             };
         };
+        return false;
+    };
 
-        //Function to claim tiles. "Value" is player index in the players list, tile is the coordinates of
-        //a given tile. The function checks if the game is currently in a tied state, if so, it lets a player
-        //claim an already claimed tile.
-        const _setTile = function (value,tile) {
-            let response = [];
-            let tied = _checkTie(tiles);
-            if(tied === false){
-                if (tiles[tile[0]][tile[1]] === 0) {
-                    tiles[tile[0]][tile[1]] = value;
-                    const tileElem = document.getElementById(`${tile[0]}${tile[1]}`);
-                    let className;
-                    switch(value){
-                        case 1:
-                            className = "playerOneSelect";
-                            break;
-                        case 2:
-                            className = "playerTwoSelect";
-                            break;
-                    };
-                    tileElem.classList.add(className);
-                    response.push(0);
-                    const checkMessage = _checkBoard();
-                    response.push(checkMessage);
-                }
-                else {
-                    response.push(1);
-                };
-            }
-            else{
-                if (tiles[tile[0]][tile[1]] !== value){
-                    const tileElem = document.getElementById(`${tile[0]}${tile[1]}`);
-                    tileElem.classList = ["tile"];
-                    tiles[tile[0]][tile[1]] = value;
-                    let className;
-                    switch(value){
-                        case 1:
-                            className = "playerOneSelect";
-                            break;
-                        case 2:
-                            className = "playerTwoSelect";
-                            break;
-                    };
-                    tileElem.classList.add(className);
-                    response.push(0);
-                    const checkMessage = _checkBoard();
-                    response.push(checkMessage);
-                }
-                else {
-                    response.push(1);
-                }
-            };
-            return response;
-        };
+})();
 
-        const _resetLine = function (lineIndex) {
-            let matchingLine = lineRef[lineIndex]
-            matchingLine.forEach(tile => {
-                tiles[tile[0]][tile[1]] = 0;
-                const tileElem = document.getElementById(`${tile[0]}${tile[1]}`);
-                tileElem.classList = ["tile"];
-            });
-            return 2;
-        };
-
-        const _resetBoard = function () {
-            for(let x = 0; x < 3; x++){
-                for(let y = 0; y < 3; y++){
-                    const tileElem = document.getElementById(`${x}${y}`);
-                    tileElem.classList = ["tile"];
-                    tiles[x][y] = 0;
-                };
-            };
-            return [3];
-        };
-
-        //Checks every tile in a given line, returns true if they're all the same value to indicate a match,
-        //otherwise returns false. Doesn't report all empties as a match.
-        const _checkTiles = function (line) {
-            if(line[0] !== 0){
-                return line.every((tile) => {
-                    return tile === line[0];
-                });
-            }
-            else {
-                return false;
-            };
-        };
+const gameBoard = (() => {
 
         //Checks the whole board for matches, returns true if a match is present on the board,
         //otherwise returns false.
