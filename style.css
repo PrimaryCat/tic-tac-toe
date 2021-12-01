@@ -348,7 +348,7 @@ input[type="text"]:disabled {
 
 .shake {
     animation: shake 0.3s;
-    animation-timing-function: steps(1);
+    animation-timing-function: linear;
 }
 
 /* ANIMATION */
@@ -364,8 +364,8 @@ input[type="text"]:disabled {
 }
 
 @keyframes shake {
-    0%   {margin-right: 5%; margin-bottom: 5%;}
-    33%  {margin-left: 5%; margin-top: 5%;}
-    66%  {margin-left: 5%; margin-bottom: 5%;}
-    100% {margin-right: 5%; margin-top: 5%;}
+    0%   {margin-right: 2%; margin-bottom: 2%;}
+    33%  {margin-right: 2%; margin-top: 2%;}
+    66%  {margin-left: 2%;  margin-bottom: 2%;}
+    100% {margin-left: 2%;  margin-top: 2%;}
 }
