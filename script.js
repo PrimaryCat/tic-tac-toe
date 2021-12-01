@@ -418,17 +418,17 @@ const initializer = (() => {
     const _addTileFunctions = function () {
         const tiles = document.querySelectorAll(".tile")
         tiles.forEach(element => {
-            element.onclick = () => gameLogic.claimTile([parseInt(element.id[0]),parseInt(element.id[1])]);
+            element.onclick = () => gameLogic.takeTurn(parseInt(element.id));
         });
     };
 
     const _addButtonFunctions = function () {
-        document.getElementById("start").onclick = () => gameLogic.startTimer();
-        document.getElementById("reset").onclick = () => gameLogic.resetGame();
-        document.getElementById("vsPlayer").onclick = () => gameLogic.changeMode(1);
-        document.getElementById("vsAI").onclick = () => gameLogic.changeMode(0);
-        document.getElementById("threeSecondButton").onclick = () => timer.setTime(3);
-        document.getElementById("fiveSecondButton").onclick = () => timer.setTime(5);
+        document.getElementById("start").onclick = () => gameLogic.createStartTimer();
+        document.getElementById("reset").onclick = () => gameLogic.reset();
+        document.getElementById("vsPlayer").onclick = () => gameLogic.changeMode("ai");
+        document.getElementById("vsAI").onclick = () => gameLogic.changeMode("human");
+        document.getElementById("threeSecondButton").onclick = () => turnTimer.set(3);
+        document.getElementById("fiveSecondButton").onclick = () => turnTimer.set(5);
     };
 
     const start = function () {
