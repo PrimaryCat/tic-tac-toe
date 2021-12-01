@@ -1,5 +1,15 @@
-let players = [];
-let currentPlayer = 0;
+const player = function (name, value, raw, opponent){
+
+    let score = 0;
+
+    return{
+        name: name,
+        value: value,
+        raw: raw,
+        opponent: opponent,
+        score
+    };
+};
 
 const player = function(name) {
     let score = 0;
