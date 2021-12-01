@@ -512,6 +512,7 @@ const domLogic = (() => {
 
     const claimTile = function (value,tile){
         const tileElem = document.getElementById(`${tile}`);
+        tileElem.classList = ["tile"];
         let className;
         switch(value){
             case 1:
@@ -521,7 +522,6 @@ const domLogic = (() => {
                 className = "playerTwoSelect";
                 break;
             default:
-                tileElem.classList = ["tile"];
                 return;
         };
         tileElem.classList.add(className);
