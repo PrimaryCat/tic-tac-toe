@@ -61,9 +61,9 @@ const boardLogic = (() => {
         return false;
     };
 
-    const checkBoard = function (){
+    const checkBoard = function (board){
         for(let reference of lineRef){
-            const line = [gameBoard[reference[0]], gameBoard[reference[1]], gameBoard[reference[2]]];
+            const line = [board[reference[0]], board[reference[1]], board[reference[2]]];
             const match = _checkMatch(line);
             if(match === true){
                 _resetLine(lineRef.indexOf(reference));
@@ -73,10 +73,15 @@ const boardLogic = (() => {
         return false;
     };
 
+    const getBoard = function (){
+        return gameBoard;
+    };
+
     return{
         reset,
         claimTile,
-        checkBoard
+        checkBoard,
+        getBoard
     }
 
 })();
@@ -153,7 +158,7 @@ const gameLogic = (() => {
         let tileClaimed = boardLogic.claimTile(currentPlayer,tile);
 
         if (tileClaimed === true){
-            let matchMade = boardLogic.checkBoard();
+            let matchMade = boardLogic.checkBoard(boardLogic.getBoard());
             if (matchMade === true){
                 currentPlayer.score++;
                 domLogic.updateScore(currentPlayer.value);
@@ -215,6 +220,49 @@ const gameLogic = (() => {
         createStartTimer,
         reset,
         getInformation
+    }
+
+})();
+
+const aiPlayer = (() => {
+
+    let move;
+
+    const _miniMax = function (board, player){
+
+        if(boardLogic.checkBoard(board) === true){
+            return gameLogic.getInformation(1)[player.opponent].raw;
+        }
+
+        move = -1;
+        score = -2;
+
+        for(let i = 0; i < 9; i++){
+            if(board[i] === 0){
+                const newBoard = board;
+                newBoard[i] = player.value;
+                let moveScore = -_miniMax(newBoard,gameLogic.getInformation(1)[player.opponent]);
+                if (moveScore > score){
+                    score = moveScore;
+                    move = i;
+                };
+            };
+        };
+
+        if(move === -1){
+            return 0;
+        };
+
+
+        return score;
+    };
+
+    const takeTurn = function (){
+
+    };
+
+    return{
+        takeTurn
     }
 
 })();
