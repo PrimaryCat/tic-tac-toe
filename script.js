@@ -182,11 +182,11 @@ const gameLogic = (() => {
 
     const createStartTimer = function (){
         if (gameRunning === false){
-            gameRunning = true;
             window.clearInterval(startTimerVar);
-            domLogic.toggleStartTimer();
+            gameRunning = true;
             startTimer = 3;
-            domLogic.updateStartTimer();
+            domLogic.updateStartTimer(startTimer);
+            domLogic.toggleStartTimer();
             startTimerVar = window.setInterval(_countDown,1000)
         };
     };
