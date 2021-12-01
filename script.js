@@ -176,7 +176,7 @@ const gameLogic = (() => {
         if(gameMode === "ai" && currentPlayer.value === 2){
             aiPlayer.takeTurn();
         };
-    }
+    };
     
     //Timer functions and variables.
     let startTimerVar;
@@ -230,7 +230,7 @@ const gameLogic = (() => {
 const aiPlayer = (() => {
 
     const lineRef = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-    
+
     let move;
 
     const _checkMatch = function (line){
@@ -282,8 +282,9 @@ const aiPlayer = (() => {
         return score;
     };
 
-    const takeTurn = function (){
+    async function takeTurn () {
         _miniMax(boardLogic.getBoard(),gameLogic.getInformation(1)[1]);
+        await new Promise(resolve => setTimeout(resolve, 500));
         gameLogic.takeTurn("ai",move);
     };
 
