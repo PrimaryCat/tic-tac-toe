@@ -64,12 +64,9 @@ const boardLogic = (() => {
     const checkBoard = function (){
         for(let reference of lineRef){
             const line = [gameBoard[reference[0]], gameBoard[reference[1]], gameBoard[reference[2]]];
-            console.log(line);  
             const match = _checkMatch(line);
-            console.log(match);
             if(match === true){
                 _resetLine(lineRef.indexOf(reference));
-                console.log("YAY")
                 return true;
             };
         };
@@ -154,7 +151,7 @@ const gameLogic = (() => {
         if (tileClaimed === true){
             let matchMade = boardLogic.checkBoard();
             if (matchMade === true){
-                currentPlayer.score = currentPlayer.score++;
+                currentPlayer.score++;
                 domLogic.updateScore(currentPlayer.value);
             };
 
