@@ -27,7 +27,7 @@ const boardLogic = (() => {
         const boardFull = _checkFull(gameBoard);
         const legalSpace = [0];
         if(boardFull){
-            legalSpace.push(player.opponent.value);
+            legalSpace.push(gameLogic.getInformation(1)[player.opponent].value);
         };
         if(legalSpace.includes(gameBoard[tileIndex])){
             gameBoard[tileIndex] = player.value;
