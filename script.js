@@ -730,13 +730,16 @@ const initializer = (() => {
         document.getElementById("soundOff").onclick = () => audioLogic.muteSwitch("Off");
         document.getElementById("musicVolume").oninput = function (){
             audioLogic.changeVolume(this.value);
-        }; 
+        };
+        document.getElementById("aiEasy").onclick = () => aiPlayer.changeDifficulty(0);
+        document.getElementById("aiMedium").onclick = () => aiPlayer.changeDifficulty(1);
     };
 
     const start = function () {
         document.getElementById("playerOneName").value = "Player 1";
         document.getElementById("playerTwoName").value = "Player 2";
         document.getElementById("soundOn").click();
+        document.getElementById("aiEasy").click();
         _addTileFunctions();
         _addButtonFunctions();
     };
