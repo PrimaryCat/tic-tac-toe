@@ -560,39 +560,44 @@ const domLogic = (() => {
 })();
 
 const audioLogic = (() => {
+    let mute = false;
+
     const hurt = new Audio();
     const claim = new Audio();
     const timer = new Audio();
     const theme = new Audio();
 
     const setupAudioElements = function (){
-        hurt.src = "assets/hurt.wav";
+        hurt.src = "assets/audio/hurt.wav";
         hurt.preload = "auto";
-        claim.src = "assets/claim.wav";
+        claim.src = "assets/audio/claim.wav";
         claim.preload = "auto";
-        timer.src = "assets/timer.wav";
+        timer.src = "assets/audio/timer.wav";
         timer.preload = "auto";
-        theme.src = "assets/theme.mp3";
+        theme.src = "assets/audio/theme.mp3";
         theme.preload = "auto";
+        theme.volume = 0.5;
         theme.loop = true;
     };
 
     const playAudio = function (sound){
-        let soundNode;
+        if(mute === false){
+            let soundNode;
 
-        switch(sound){
-            case "hurt":
-                soundNode = hurt.cloneNode();
-                break;
-            case "claim":
-                soundNode = claim.cloneNode();
-                break;
-            case "timer":
-                soundNode = timer.cloneNode();
-                break;
+            switch(sound){
+                case "hurt":
+                    soundNode = hurt.cloneNode();
+                    break;
+                case "claim":
+                    soundNode = claim.cloneNode();
+                    break;
+                case "timer":
+                    soundNode = timer.cloneNode();
+                    break;
+            };
+            
+            soundNode.play();
         };
-
-        soundNode.play();
     };
 
     return{
