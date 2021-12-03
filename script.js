@@ -350,6 +350,7 @@ const domLogic = (() => {
 
     //Get necessary DOM elements.
     const centerCard = document.getElementById("centerCard");
+    const menuCard = document.getElementById("menuCard");
     //Player elements.
     const playerOne = document.getElementById("playerOne");
     const scoreOne = document.getElementById("playerOneScore");
@@ -536,6 +537,10 @@ const domLogic = (() => {
         return [nameOne.value, nameTwo.value]
     };
 
+    const toggleMenu = function (){
+        menuCard.classList.toggle("hidden");
+    };
+
     async function _shake (element) {
         element.classList.toggle("shake");
         await new Promise(resolve => setTimeout(resolve, 300));
@@ -554,6 +559,7 @@ const domLogic = (() => {
         reset,
         start,
         claimTile,
+        toggleMenu,
         getNames
     }
 
@@ -561,23 +567,29 @@ const domLogic = (() => {
 
 const audioLogic = (() => {
     let mute = false;
+    let volume = 0.1;
 
     const hurt = new Audio();
+    hurt.src = "assets/audio/hurt.wav";
     const claim = new Audio();
+    claim.src = "assets/audio/claim.wav";
     const timer = new Audio();
+    timer.src = "assets/audio/timer.wav";
     const theme = new Audio();
+    theme.src = "assets/audio/theme.mp3";
+    theme.preload = "auto";
+    theme.volume = 0.1;
+    theme.loop = true;
+
+    const audioList = [hurt,claim,timer]
 
     const setupAudioElements = function (){
-        hurt.src = "assets/audio/hurt.wav";
-        hurt.preload = "auto";
-        claim.src = "assets/audio/claim.wav";
-        claim.preload = "auto";
-        timer.src = "assets/audio/timer.wav";
-        timer.preload = "auto";
-        theme.src = "assets/audio/theme.mp3";
-        theme.preload = "auto";
-        theme.volume = 0.1;
-        theme.loop = true;
+        audioList.forEach(audio => {
+            audio.preload = "auto";
+            audio.volume = 0;
+            audio.play();
+            audio.volume = 1;
+        });
     };
 
     const playAudio = function (sound){
@@ -603,8 +615,30 @@ const audioLogic = (() => {
         };
     };
 
+    const muteSwitch = function (value){
+        switch(value){
+            case "Off":
+                mute = true;
+                theme.volume = 0;
+                break;
+            case "On":
+                mute = false;
+                theme.volume = volume;
+                break;
+        };
+    };
+
+    const changeVolume = function (value){
+        volume = value/10;
+        if(mute === false){
+            theme.volume = volume;
+        };
+    };
+
     return{
         setupAudioElements,
+        muteSwitch,
+        changeVolume,
         playAudio
     };
 
@@ -630,11 +664,18 @@ const initializer = (() => {
             audioLogic.playAudio("theme");
             document.getElementById("titleCard").classList.add("fade");
         };
+        document.getElementById("menuButton").onclick = () => domLogic.toggleMenu();
+        document.getElementById("soundOn").onclick = () => audioLogic.muteSwitch("On");
+        document.getElementById("soundOff").onclick = () => audioLogic.muteSwitch("Off");
+        document.getElementById("musicVolume").oninput = function (){
+            audioLogic.changeVolume(this.value);
+        }; 
     };
 
     const start = function () {
         document.getElementById("playerOneName").value = "Player 1";
         document.getElementById("playerTwoName").value = "Player 2";
+        document.getElementById("soundOn").click();
         _addTileFunctions();
         _addButtonFunctions();
     };
@@ -643,8 +684,6 @@ const initializer = (() => {
         start
     };
 })();
-
-
 
 initializer.start();
 audioLogic.setupAudioElements();

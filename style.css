@@ -220,6 +220,10 @@ input[type="text"]:disabled {
     right: 2.5%;
 }
 
+#menuButton:active {
+    scale: 0.9;
+}
+
 #soundOptions {
     display: flex;
     align-items: center;
