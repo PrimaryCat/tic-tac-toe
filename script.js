@@ -394,10 +394,12 @@ const domLogic = (() => {
     const updateScore = function (playerValue){
         switch(playerValue){
             case 1:
+                audioLogic.playAudio("hurt");
                 scoreOne.innerText = gameLogic.getInformation(1)[0].score;
                 _shake(playerTwo);
                 break;
             case 2:
+                audioLogic.playAudio("hurt");
                 _shake(playerOne);
                 scoreTwo.innerText = gameLogic.getInformation(1)[1].score;
                 break;
@@ -440,6 +442,7 @@ const domLogic = (() => {
     };
 
     const updateStartTimer = function (time) {
+        audioLogic.playAudio("timer");
         startTimerText.innerText = time;
     };
 
@@ -516,9 +519,11 @@ const domLogic = (() => {
         let className;
         switch(value){
             case 1:
+                audioLogic.playAudio("claim");
                 className = "playerOneSelect";
                 break;
             case 2:
+                audioLogic.playAudio("claim");
                 className = "playerTwoSelect";
                 break;
             default:
@@ -554,7 +559,50 @@ const domLogic = (() => {
 
 })();
 
+const audioLogic = (() => {
+    const hurt = new Audio();
+    const claim = new Audio();
+    const timer = new Audio();
+
+    const setupAudioElements = function (){
+        hurt.src = "assets/hurt.wav";
+        hurt.preload = "auto";
+        claim.src = "assets/claim.wav";
+        claim.preload = "auto";
+        timer.src = "assets/timer.wav";
+        timer.preload = "auto";
+    };
+
+    const playAudio = function (sound){
+        let soundNode;
+
+        switch(sound){
+            case "hurt":
+                soundNode = hurt.cloneNode();
+                break;
+            case "claim":
+                soundNode = claim.cloneNode();
+                break;
+            case "timer":
+                soundNode = timer.cloneNode();
+                break;
+        };
+
+        soundNode.play();
+    };
+
+    return{
+        setupAudioElements,
+        playAudio
+    };
+
+})();
+
 const initializer = (() => {
+
+
+
+
 
     const _addTileFunctions = function () {
         const tiles = document.querySelectorAll(".tile")
@@ -586,4 +634,5 @@ const initializer = (() => {
 
 
 
-initializer.start()
+initializer.start();
+audioLogic.setupAudioElements();
