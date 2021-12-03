@@ -202,6 +202,25 @@ input[type="text"]:disabled {
     color: var(--background);
 }
 
+#menuCard {
+    position: absolute;
+    z-index: 4;
+    background-color: white;
+    font-weight: bolder;
+    font-size: 3vh;
+    color: var(--foreground);
+    gap: 10%;
+    border-radius: 20px;
+}
+
+#soundOptions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 10px;
+}
+
 #endCard {
     position: absolute;
     z-index: 3;
@@ -237,6 +256,14 @@ input[type="text"]:disabled {
 }
 
 /* CLASSES */
+
+.menuOption {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
 
 .playerOneSelect {
     background-color: var(--accent-two);
