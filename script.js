@@ -563,6 +563,7 @@ const audioLogic = (() => {
     const hurt = new Audio();
     const claim = new Audio();
     const timer = new Audio();
+    const theme = new Audio();
 
     const setupAudioElements = function (){
         hurt.src = "assets/hurt.wav";
@@ -571,6 +572,9 @@ const audioLogic = (() => {
         claim.preload = "auto";
         timer.src = "assets/timer.wav";
         timer.preload = "auto";
+        theme.src = "assets/theme.mp3";
+        theme.preload = "auto";
+        theme.loop = true;
     };
 
     const playAudio = function (sound){
