@@ -69,7 +69,7 @@ input[type="text"]:disabled {
 
 #titleCard {
     position: absolute;
-    z-index: 99;
+    z-index: 9;
     background-color: var(--background);
     gap: 200px;
 }
@@ -211,6 +211,7 @@ input[type="text"]:disabled {
     color: var(--foreground);
     gap: 10%;
     border-radius: 20px;
+    padding: 10px;
 }
 
 #menuInfo{
@@ -272,6 +273,15 @@ input[type="text"]:disabled {
 
 #aiToggle {
     height: 10%;
+}
+
+#landscapeWarning {
+    position: absolute;
+    user-select: none;
+    background-color: var(--background);
+    z-index: 10;
+    visibility: hidden;
+    writing-mode: vertical-rl;
 }
 
 /* CLASSES */
@@ -443,4 +453,20 @@ input[type="text"]:disabled {
 @keyframes fade {
     0% {opacity: 1; visibility: visible;}
     100% {opacity: 0; visibility: hidden;}
+}
+
+/* MOBILE SUPPORT */
+@media only screen and (max-width: 500px) {
+
+    body, html {
+        overflow: hidden;
+    }
+
+    #landscapeWarning {
+        visibility: visible;
+    }
+
+    #gameScreen {
+        visibility: hidden;
+    }
 }
