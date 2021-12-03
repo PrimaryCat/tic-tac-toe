@@ -332,9 +332,12 @@ const aiPlayer = (() => {
         return move;
     };
 
+    const getDifficulty = function (){
+        return difficulty;
+    };
+
     const changeDifficulty = function(value){
         difficulty = value;
-        console.log(difficulty);
     };
 
     async function takeTurn () {
@@ -352,6 +355,7 @@ const aiPlayer = (() => {
 
     return{
         takeTurn,
+        getDifficulty,
         changeDifficulty
     }
 
@@ -440,6 +444,11 @@ const domLogic = (() => {
     const aiButton = document.getElementById("vsAI");
     const tsButton = document.getElementById("threeSecondButton");
     const fsButton = document.getElementById("fiveSecondButton");
+    const soButton = document.getElementById("soundOn");
+    const sfButton = document.getElementById("soundOff");
+    const eaButton = document.getElementById("aiEasy");
+    const meButton = document.getElementById("aiMedium");
+    const voSlider = document.getElementById("musicVolume");
 
     const displayTurn = function (playerValue){
         switch(playerValue){
@@ -602,6 +611,32 @@ const domLogic = (() => {
 
     const toggleMenu = function (){
         menuCard.classList.toggle("hidden");
+        if(menuCard.classList.contains("hidden")){
+            settingsStorage.saveSettings();
+        };
+    };
+
+    const loadSettings = function (settings){
+        switch(settings.mute){
+            case true:
+                sfButton.click();
+                break;
+            case false:
+                soButton.click();
+                break;
+        };
+
+        voSlider.value = settings.volume * 10;
+        voSlider.oninput();
+
+        switch(settings.difficulty){
+            case 0:
+                eaButton.click();
+                break;
+            case 1:
+                meButton.click();
+                break;
+        };
     };
 
     async function _shake (element) {
@@ -623,8 +658,9 @@ const domLogic = (() => {
         start,
         claimTile,
         toggleMenu,
+        loadSettings,
         getNames
-    }
+    };
 
 })();
 
@@ -698,10 +734,15 @@ const audioLogic = (() => {
         };
     };
 
+    const getSettings = function (){
+        return {mute:mute,volume:volume}
+    };
+
     return{
         setupAudioElements,
         muteSwitch,
         changeVolume,
+        getSettings,
         playAudio
     };
 
@@ -751,5 +792,26 @@ const initializer = (() => {
     };
 })();
 
+const settingsStorage = (() => {
+
+    const saveSettings = function (){
+        const settings = audioLogic.getSettings();
+        settings.difficulty = aiPlayer.getDifficulty();
+        window.localStorage.setItem("settings",JSON.stringify(settings));
+    };
+
+    const loadSettings = function (){
+        const settings = JSON.parse(window.localStorage.getItem("settings"));
+        domLogic.loadSettings(settings);
+    };
+
+    return{
+        saveSettings,
+        loadSettings
+    }
+
+})();
+
 initializer.start();
 audioLogic.setupAudioElements();
+settingsStorage.loadSettings();
