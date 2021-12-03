@@ -12,6 +12,8 @@ A tic-tac-toe variant
 
 Tic-Tac Blitz! is a singleplayer / local multiplayer browser game made for the tic-tac-toe assignment of [The Odin Project](https://www.theodinproject.com/). The game is a fast paced strategic variant of tic-tac-toe.
 
+Live demo: https://kazakazan.github.io/tic-tac-toe/
+
 # Rules
 
 The game is played similarly to tic-tac-toe, with some slight modifications to the rules.
