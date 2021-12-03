@@ -213,6 +213,13 @@ input[type="text"]:disabled {
     border-radius: 20px;
 }
 
+#menuButton {
+    position: absolute;
+    height: 5%;
+    top: 2.5%;
+    right: 2.5%;
+}
+
 #soundOptions {
     display: flex;
     align-items: center;
