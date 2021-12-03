@@ -577,6 +577,7 @@ const domLogic = (() => {
         topCenter.classList.remove("shrink");
         messageBox.classList.remove("round");
         endCard.classList.add("hidden");
+        avatarTwo.src = "assets/images/playerTwo.png";
         displayTurn(0);
     };
 
