@@ -88,7 +88,7 @@ const boardLogic = (() => {
 
 const gameLogic = (() => {
     let players = [];
-    let currentPlayer;
+    let currentPlayer = null;
 
     const createPlayers = function (){
         const playerNames = domLogic.getNames();
@@ -151,21 +151,23 @@ const gameLogic = (() => {
     //Turn order functions and variables.
     
     const takeTurn = function (humanOrAI,tile){
-        if(currentPlayer.value === 2 && humanOrAI !== gameMode){
-            return;
-        };
-
-        let tileClaimed = boardLogic.claimTile(currentPlayer,tile);
-
-        if (tileClaimed === true){
-            let matchMade = boardLogic.checkBoard();
-            if (matchMade === true){
-                currentPlayer.score++;
-                domLogic.updateScore(currentPlayer.value);
+        if(currentPlayer !== null){
+            if(currentPlayer.value === 2 && humanOrAI !== gameMode){
+                return;
             };
-
-            changeTurn();
-            _end();
+    
+            let tileClaimed = boardLogic.claimTile(currentPlayer,tile);
+    
+            if (tileClaimed === true){
+                let matchMade = boardLogic.checkBoard();
+                if (matchMade === true){
+                    currentPlayer.score++;
+                    domLogic.updateScore(currentPlayer.value);
+                };
+    
+                changeTurn();
+                _end();
+            };
         };
     };
 
