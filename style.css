@@ -71,8 +71,19 @@ input[type="text"]:disabled {
     position: absolute;
     z-index: 9;
     background-color: var(--background);
-    gap: 200px;
+    gap: 100px;
 }
+
+#titleImageCard {
+    height: 40%;
+    padding: 20px;
+}
+
+#titleImage{
+    height: 100%;
+}
+
+
 
 #play {
     width: 200px;
