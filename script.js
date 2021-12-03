@@ -422,9 +422,11 @@ const domLogic = (() => {
     const playerOne = document.getElementById("playerOne");
     const scoreOne = document.getElementById("playerOneScore");
     const nameOne = document.getElementById("playerOneName");
+    const darkenOne = document.getElementById("playerOneDarken");
     const playerTwo = document.getElementById("playerTwo");
     const scoreTwo = document.getElementById("playerTwoScore");
     const nameTwo = document.getElementById("playerTwoName");
+    const darkenTwo = document.getElementById("playerTwoDarken");
     const avatarTwo = document.getElementById("playerTwoAvatar");
     //Turn timer elements.
     const turnTimerText = document.getElementById("timerDisplayText");
@@ -532,9 +534,11 @@ const domLogic = (() => {
         switch(player.value){
             case 1:
                 winnerName.style.color = "var(--accent-two-dark)";
+                darkenTwo.classList.remove("hidden");
                 break;
             case 2:
                 winnerName.style.color = "var(--accent-three-dark)";
+                darkenOne.classList.remove("hidden");
                 break;
         };
     };
@@ -577,6 +581,8 @@ const domLogic = (() => {
         topCenter.classList.remove("shrink");
         messageBox.classList.remove("round");
         endCard.classList.add("hidden");
+        darkenOne.classList.add("hidden");
+        darkenTwo.classList.add("hidden");
         avatarTwo.src = "assets/images/playerTwo.png";
         displayTurn(0);
     };
