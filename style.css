@@ -67,6 +67,19 @@ input[type="text"]:disabled {
 
 /* IDs */
 
+#titleCard {
+    position: absolute;
+    z-index: 99;
+    background-color: var(--background);
+    gap: 200px;
+}
+
+#play {
+    width: 200px;
+    height: 100px;
+    background-color: var(--accent-three);
+}
+
 #mainContent {
     width: 80%;
     height: 80%;
@@ -351,6 +364,11 @@ input[type="text"]:disabled {
     animation-timing-function: steps(1);
 }
 
+.fade {
+    animation: fade 0.5s;
+    animation-fill-mode: forwards;
+}
+
 /* ANIMATION */
 
 @keyframes shrink {
@@ -368,4 +386,9 @@ input[type="text"]:disabled {
     33%  {margin-right: 5%; margin-top: 5%;}
     66%  {margin-left: 5%;  margin-bottom: 5%;}
     100% {margin-left: 5%;  margin-top: 5%;}
+}
+
+@keyframes fade {
+    0% {opacity: 1; visibility: visible;}
+    100% {opacity: 0; visibility: hidden;}
 }

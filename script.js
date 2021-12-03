@@ -576,7 +576,7 @@ const audioLogic = (() => {
         timer.preload = "auto";
         theme.src = "assets/audio/theme.mp3";
         theme.preload = "auto";
-        theme.volume = 0.5;
+        theme.volume = 0.1;
         theme.loop = true;
     };
 
@@ -594,8 +594,11 @@ const audioLogic = (() => {
                 case "timer":
                     soundNode = timer.cloneNode();
                     break;
+                case "theme":
+                    soundNode = theme;
+                    break;
             };
-            
+
             soundNode.play();
         };
     };
@@ -608,10 +611,6 @@ const audioLogic = (() => {
 })();
 
 const initializer = (() => {
-
-
-
-
 
     const _addTileFunctions = function () {
         const tiles = document.querySelectorAll(".tile")
@@ -627,6 +626,10 @@ const initializer = (() => {
         document.getElementById("vsAI").onclick = () => gameLogic.changeMode("human");
         document.getElementById("threeSecondButton").onclick = () => turnTimer.set(3);
         document.getElementById("fiveSecondButton").onclick = () => turnTimer.set(5);
+        document.getElementById("play").onclick = () => {
+            audioLogic.playAudio("theme");
+            document.getElementById("titleCard").classList.add("fade");
+        };
     };
 
     const start = function () {
