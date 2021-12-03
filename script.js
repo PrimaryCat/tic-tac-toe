@@ -229,6 +229,8 @@ const gameLogic = (() => {
 
 const aiPlayer = (() => {
 
+    let difficulty = 0;
+
     const lineRef = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
     let move;
@@ -282,14 +284,73 @@ const aiPlayer = (() => {
         return score;
     };
 
+    const _bruteForce = function (board){
+        let selfLegal = [0];
+        let opponentLegal = [0];
+
+        move = -1;
+
+        if (board.includes(0) === false){
+            selfLegal.push(1);
+            opponentLegal.push(2);
+        };
+
+        for(let i = 0; i < 9; i++){
+            if(opponentLegal.includes(board[i]) === true){
+                const newBoard = Array.from(board);
+                newBoard[i] = 1;
+                const match = _checkBoard(newBoard);
+                if (match[0] === true){
+                    move = i;
+                };
+            };
+        };
+
+        for(let i = 0; i < 9; i++){
+            if(selfLegal.includes(board[i]) === true){
+                const newBoard = Array.from(board);
+                newBoard[i] = 2;
+                const match = _checkBoard(newBoard);
+                if (match[0] === true){
+                    move = i;
+                };
+            };
+        };
+
+        if(move===-1){
+            while(move === -1){
+                let i = Math.floor(Math.random() * 9);
+                if(selfLegal.includes(board[i])){
+                    move = i;
+                    break;
+                };
+            };
+        };
+
+        return move;
+    };
+
+    const changeDifficulty = function(value){
+        difficulty = value;
+        console.log(difficulty);
+    };
+
     async function takeTurn () {
-        _miniMax(boardLogic.getBoard(),gameLogic.getInformation(1)[1]);
+        switch(difficulty){
+            case 0:
+                _miniMax(boardLogic.getBoard(),gameLogic.getInformation(1)[1]);
+                break;
+            case 1:
+                _bruteForce(boardLogic.getBoard())
+                break;
+        };
         await new Promise(resolve => setTimeout(resolve, 500));
         gameLogic.takeTurn("ai",move);
     };
 
     return{
-        takeTurn
+        takeTurn,
+        changeDifficulty
     }
 
 })();
