@@ -190,6 +190,14 @@ input[type="text"]:disabled {
     color: var(--accent-two-dark);
 }
 
+#playerOneName {
+    color: var(--foreground-light);
+}
+
+#playerTwoName {
+    color: var(--foreground-light);
+}
+
 #centerCard {
     position: relative;
     aspect-ratio: 1/1;

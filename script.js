@@ -564,9 +564,9 @@ const domLogic = (() => {
         humanButton.classList.remove("hidden");
         aiButton.classList.add("hidden");
         nameOne.disabled = false;
-        nameOne.style.color = "var(--foreground)";
+        nameOne.style.color = "var(--foreground-light)";
         nameTwo.disabled = false;
-        nameTwo.style.color = "var(--foreground)";
+        nameTwo.style.color = "var(--foreground-light)";
         tsButton.classList.add("tButtonOn")
         fsButton.classList.remove("tButtonOn")
         turnTimerSetter.classList.remove("hidden");
@@ -581,9 +581,9 @@ const domLogic = (() => {
         resetButton.classList.remove("hidden");
         startButton.classList.add("hidden");
         nameOne.disabled = true;
-        nameOne.style.color = "var(--foreground-light)";
+        nameOne.style.color = "var(--accent-two-dark)";
         nameTwo.disabled = true;
-        nameTwo.style.color = "var(--foreground-light)";
+        nameTwo.style.color = "var(--accent-three-dark)";
         turnTimerSetter.classList.add("hidden");
         turnTimerDisplay.classList.remove("hidden");
         topCenter.classList.add("shrink");
