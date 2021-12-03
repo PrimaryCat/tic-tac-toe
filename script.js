@@ -425,6 +425,7 @@ const domLogic = (() => {
     const playerTwo = document.getElementById("playerTwo");
     const scoreTwo = document.getElementById("playerTwoScore");
     const nameTwo = document.getElementById("playerTwoName");
+    const avatarTwo = document.getElementById("playerTwoAvatar");
     //Turn timer elements.
     const turnTimerText = document.getElementById("timerDisplayText");
     const topCenter = document.getElementById("topCenter");
@@ -546,12 +547,14 @@ const domLogic = (() => {
                 aiButton.classList.remove("hidden");
                 nameTwo.value = "Robobot";
                 nameTwo.disabled = true;
+                avatarTwo.src = "assets/images/robobot.png";
                 break;
             case "human":
                 humanButton.classList.remove("hidden");
                 aiButton.classList.add("hidden");
                 nameTwo.value = "Player 2";
                 nameTwo.disabled = false;
+                avatarTwo.src = "assets/images/playerTwo.png";
                 break;
         };
     };
