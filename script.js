@@ -502,6 +502,7 @@ const domLogic = (() => {
     };
 
     const setTurnTimer = function (timer) {
+        audioLogic.playAudio("click");
         switch(timer){
             case 3:
                 tsButton.classList.add("tButtonOn")
@@ -524,6 +525,7 @@ const domLogic = (() => {
     };
 
     const displayWinner = function (player) {
+        audioLogic.playAudio("win");
         winnerName.innerText = player.name;
         endCard.classList.remove("hidden");
         switch(player.value){
@@ -537,6 +539,7 @@ const domLogic = (() => {
     };
 
     const changeMode = function (mode) {
+        audioLogic.playAudio("click");
         switch(mode){
             case "ai":
                 humanButton.classList.add("hidden");
@@ -554,6 +557,7 @@ const domLogic = (() => {
     };
 
     const reset = function () {
+        audioLogic.playAudio("click");
         updateScore(0);
         resetButton.classList.add("hidden");
         startButton.classList.remove("hidden");
@@ -610,6 +614,7 @@ const domLogic = (() => {
     };
 
     const toggleMenu = function (){
+        audioLogic.playAudio("click");
         menuCard.classList.toggle("hidden");
         if(menuCard.classList.contains("hidden")){
             settingsStorage.saveSettings();
@@ -674,13 +679,17 @@ const audioLogic = (() => {
     claim.src = "assets/audio/claim.wav";
     const timer = new Audio();
     timer.src = "assets/audio/timer.wav";
+    const click = new Audio();
+    click.src = "assets/audio/button.wav";
+    const win = new Audio();
+    win.src = "assets/audio/win.wav";
     const theme = new Audio();
     theme.src = "assets/audio/theme.mp3";
     theme.preload = "auto";
     theme.volume = 0.1;
     theme.loop = true;
 
-    const audioList = [hurt,claim,timer]
+    const audioList = [hurt,claim,timer,click,win]
 
     const setupAudioElements = function (){
         audioList.forEach(audio => {
@@ -689,6 +698,7 @@ const audioLogic = (() => {
             audio.play();
             audio.volume = 1;
         });
+        claim.volume = 2;
     };
 
     const playAudio = function (sound){
@@ -704,6 +714,12 @@ const audioLogic = (() => {
                     break;
                 case "timer":
                     soundNode = timer.cloneNode();
+                    break;
+                case "click":
+                    soundNode = click.cloneNode();
+                    break;
+                case "win":
+                    soundNode = win.cloneNode();
                     break;
                 case "theme":
                     soundNode = theme;

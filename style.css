@@ -316,6 +316,7 @@ input[type="text"]:disabled {
     border-bottom: 5px solid;
     border-color: var(--dark-shadow);
     box-shadow: 3px 3px var(--shadow);
+    cursor: pointer;
 }
 
 .button:active {
