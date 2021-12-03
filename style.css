@@ -500,3 +500,15 @@ input[type="text"]:disabled {
         visibility: hidden;
     }
 }
+
+@media only screen and (max-height: 400px) {
+    
+    .scoreField {
+        position: relative;
+        margin-top: 10px;
+    }
+
+    #gitImage {
+        height: 20px;
+    }
+}
