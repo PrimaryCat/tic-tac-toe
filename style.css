@@ -515,6 +515,7 @@ input[type="text"]:disabled {
         "playerTwo playerTwo";
         gap: 3%;
         place-items: center;
+        padding-bottom: 12vw;
     }
 
     #centerCard {
@@ -535,7 +536,7 @@ input[type="text"]:disabled {
         height: 10vw;
         right: auto;
         top: auto;
-        bottom: 1%;
+        bottom: 2.5vw;
     }
 
     #menuCard {
@@ -585,6 +586,13 @@ input[type="text"]:disabled {
 
     .timerButton {
         font-size: 5vw;
+    }
+
+    /* Animation */
+
+    @keyframes shrink {
+        0% {width: 100%;border-radius: 20px;}
+        100% {width: 15%;border-radius: 50%;aspect-ratio: 1/1;}
     }
 }
 
