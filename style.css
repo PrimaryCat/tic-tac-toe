@@ -293,15 +293,6 @@ input[type="text"]:disabled {
     height: 10%;
 }
 
-#landscapeWarning {
-    position: absolute;
-    user-select: none;
-    background-color: var(--background);
-    z-index: 10;
-    visibility: hidden;
-    writing-mode: vertical-rl;
-}
-
 /* CLASSES */
 
 .darken {
@@ -513,17 +504,36 @@ input[type="text"]:disabled {
     }
 
     #mainContent {
-        grid-template-rows: 5% 5% 10% 50% 10%;
-        grid-template-columns: 20% 50% 20%;
+        grid-template-rows: 7.5% 7.5% 10% 50% 10%;
+        grid-template-columns: 47.5% 47.5%;
         grid-template-areas:
-        "message message message"
-        "reset . ai" 
-        "playerOne playerOne playerOne"
-        "gameBoard gameBoard gameBoard"
-        "playerTwo playerTwo playerTwo";
+        "message message"
+        "reset ai" 
+        "playerOne playerOne"
+        "gameBoard gameBoard"
+        "playerTwo playerTwo";
+    }
+
+    #messageBox {
+        width: 97%;
+    }
+
+    #timerText {
+        font-size: 5vw;
+    }
+
+    #menuButton {
+        height: 10vw;
+        right: auto;
+        top: auto;
+        bottom: 1%;
     }
 
     /* CLASSES */
+
+    .button {
+        font-size: 5vw;
+    }
 
     .playerCard {
         display: grid;
@@ -548,6 +558,10 @@ input[type="text"]:disabled {
 
     .scoreField {
         grid-area: score;
+        font-size: 5vw;
+    }
+
+    .timerButton {
         font-size: 5vw;
     }
 }
