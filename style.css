@@ -504,14 +504,23 @@ input[type="text"]:disabled {
     }
 
     #mainContent {
-        grid-template-rows: 7.5% 7.5% 10% 50% 10%;
-        grid-template-columns: 47.5% 47.5%;
+        height: 100%;
+        grid-template-rows: 7.5% 7.5% 10% 80vw 10%;
+        grid-template-columns: 50% 50%;
         grid-template-areas:
         "message message"
         "reset ai" 
         "playerOne playerOne"
         "gameBoard gameBoard"
         "playerTwo playerTwo";
+        gap: 3%;
+        place-items: center;
+    }
+
+    #centerCard {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1/1;
     }
 
     #messageBox {
@@ -532,6 +541,10 @@ input[type="text"]:disabled {
     #menuCard {
         font-size: 5vw;
         gap: 5vw;
+    }
+
+    #musicVolume {
+        width: 100%;
     }
 
     #menuInfo {
